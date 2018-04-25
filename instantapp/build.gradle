@@ -2,5 +2,9 @@ apply plugin: 'com.android.instantapp'
 
 dependencies {
     implementation project(':browser')
+    implementation project(':homepage')
     implementation project(':base')
+}
+repositories {
+    mavenCentral()
 }

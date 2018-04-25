@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="laurenyew.imagebrowser.browser">
 
-    <application>
-        <activity android:name=".MainActivity">
+    <application
+        android:supportsRtl="true">
+        <activity
+            android:name=".activities.ImageBrowserActivity"
+            android:label="@string/image_browser_title"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -11,15 +15,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="laurenyew"
+                    android:host="laurenyew.imagebrowser.com"
                     android:pathPattern="/imagebrowser"
                     android:scheme="https" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.ImageDetailActivity"
+            android:label="@string/image_detail_title"
+            android:parentActivityName=".activities.ImageBrowserActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="laurenyew.imagebrowser.browser.activities.ImageBrowserActivity" />
         </activity>
     </application>
 

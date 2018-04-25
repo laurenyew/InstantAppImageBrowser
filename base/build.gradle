@@ -1,11 +1,13 @@
 apply plugin: 'com.android.feature'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     baseFeature true
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -18,8 +20,26 @@ android {
 }
 
 dependencies {
-    api 'com.android.support:appcompat-v7:26.1.0'
-    api 'com.android.support.constraint:constraint-layout:1.1.0'
     application project(':app')
+
     feature project(':browser')
+    feature project(":homepage")
+
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    //Networking / Data
+    api 'com.squareup.retrofit2:retrofit:2.4.0'
+    api 'com.squareup.moshi:moshi:1.5.0'
+    api 'com.squareup.moshi:moshi-kotlin:1.5.0'
+    api 'com.squareup.retrofit2:converter-moshi:2.4.0'
+
+    //Android Support
+    api "com.android.support:support-v4:27.1.1"
+
+    //UI
+    api 'com.android.support:appcompat-v7:27.1.1'
+    api 'com.android.support.constraint:constraint-layout:1.1.0'
+}
+repositories {
+    mavenCentral()
 }
