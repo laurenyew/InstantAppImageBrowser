@@ -13,6 +13,7 @@ import laurenyew.imagebrowser.browser.adapters.data.ImagePreviewDataWrapper
 import laurenyew.imagebrowser.browser.adapters.viewHolder.ImagePreviewViewHolder
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserContract
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * ImageBrowser Preview RecyclerView Adapter
@@ -24,9 +25,10 @@ open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserCo
 
     //RecyclerView Diff.Util (List Updates)
     open fun updateData(newData: List<ImagePreviewDataWrapper>?) {
-        pendingDataUpdates.add(newData)
+        val data = newData ?: ArrayList()
+        pendingDataUpdates.add(data)
         if (pendingDataUpdates.size <= 1) {
-            updateDataInternal(newData)
+            updateDataInternal(data)
         }
     }
 
@@ -82,6 +84,7 @@ open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserCo
         if (holder.imageView != null) {
             Picasso.get()
                     .load(itemImageUrl)
+                    .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_placeholder)
                     .into(holder.imageView)
         }

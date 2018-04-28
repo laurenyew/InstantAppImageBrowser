@@ -3,12 +3,9 @@ package laurenyew.imagebrowser.base.commands
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.squareup.moshi.KotlinJsonAdapterFactory
-import com.squareup.moshi.Moshi
 import laurenyew.imagebrowser.base.api.FlickrImageApi
 import laurenyew.imagebrowser.base.model.ImageData
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import laurenyew.imagebrowser.base.networking.FlickrApiBuilder
 
 /**
  * Command used by the browser feature to get images
@@ -28,12 +25,7 @@ open class GetImagesCommand(private val apiKey: String, private val searchTerm: 
     open fun execute() {
         job = Thread(Runnable {
             val handler = Handler(Looper.getMainLooper())
-            val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-            val retrofitBuilder = Retrofit.Builder().baseUrl("https://api.flickr.com/services/")
-                    .addConverterFactory(MoshiConverterFactory.create(moshi))
-
-            val retrofit = retrofitBuilder.build()
-            val getImagesApi = retrofit.create(FlickrImageApi::class.java)
+            val getImagesApi = FlickrApiBuilder.apiBuilder(FlickrImageApi::class.java)
             val extraArgs = HashMap<String, String>()
             extraArgs["privacy_filter"] = "1"
 
