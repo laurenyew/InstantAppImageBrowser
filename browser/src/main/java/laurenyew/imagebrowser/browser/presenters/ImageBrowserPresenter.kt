@@ -2,6 +2,7 @@ package laurenyew.imagebrowser.browser.presenters
 
 import android.content.Context
 import android.util.Log
+import laurenyew.imagebrowser.base.commands.AsyncJobCommand
 import laurenyew.imagebrowser.base.commands.GetRecentImagesCommand
 import laurenyew.imagebrowser.base.commands.SearchImagesCommand
 import laurenyew.imagebrowser.base.model.ImageData
@@ -24,8 +25,7 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
     private var viewRef: WeakReference<ImageBrowserContract.View>? = null
     private var apiKey: String? = null
     //Only one command should be run at once
-    private var searchImagesCommand: SearchImagesCommand? = null
-    private var getRecentImagesCommand: GetRecentImagesCommand? = null
+    private var command: AsyncJobCommand? = null
     private var data: ArrayList<ImagePreviewDataWrapper> = ArrayList()
 
     private var currentPageNum: Int = 1
@@ -49,8 +49,8 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
     override fun unBind() {
         viewRef?.clear()
         viewRef = null
-        searchImagesCommand?.cancel()
-        searchImagesCommand = null
+        command?.cancel()
+        command = null
         data.clear()
         searchTerm = null
     }
@@ -60,8 +60,7 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
      */
     override fun refreshImages(searchTerm: String) {
         //Only let 1 command run at once
-        getRecentImagesCommand?.cancel()
-        searchImagesCommand?.cancel()
+        command?.cancel()
 
         //reset the current page
         currentPageNum = 1
@@ -70,17 +69,17 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
         //load the images async
         val currentApiKey = apiKey
         if (currentApiKey != null) {
-            if (searchTerm.isNotEmpty()) {
-                searchImagesCommand = SearchImagesCommand(currentApiKey, searchTerm, numImagesPerPage, currentPageNum,
+            command = if (searchTerm.isNotEmpty()) {
+                SearchImagesCommand(currentApiKey, searchTerm, numImagesPerPage, currentPageNum,
                         { list, pageNum, totalNumPages -> onLoadImagesSuccess(list, pageNum, totalNumPages) },
                         { errorCode -> onLoadImagesFailure(errorCode) })
-                searchImagesCommand?.execute()
+
             } else {
-                getRecentImagesCommand = GetRecentImagesCommand(currentApiKey, numImagesPerPage, currentPageNum,
+                GetRecentImagesCommand(currentApiKey, numImagesPerPage, currentPageNum,
                         { list, pageNum, totalNumPages -> onLoadImagesSuccess(list, pageNum, totalNumPages) },
                         { errorCode -> onLoadImagesFailure(errorCode) })
-                getRecentImagesCommand?.execute()
             }
+            command?.execute()
         }
     }
 
@@ -90,25 +89,25 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
      */
     override fun loadNextPageOfImages() {
         //Only let 1 command run at once
-        getRecentImagesCommand?.cancel()
-        searchImagesCommand?.cancel()
+        command?.cancel()
 
         val nextPageNum = currentPageNum + 1
         val currentApiKey = apiKey
         if (currentApiKey != null && nextPageNum <= totalNumPages) {
             //load the images async for next page
-            if (searchTerm?.isNotEmpty() == true) {
-                searchImagesCommand = SearchImagesCommand(currentApiKey, searchTerm
+            command = if (searchTerm?.isNotEmpty() == true) {
+                SearchImagesCommand(currentApiKey, searchTerm
                         ?: "", numImagesPerPage, nextPageNum,
                         { list, pageNum, totalNumPages -> onLoadImagesSuccess(list, pageNum, totalNumPages) },
                         { errorCode -> onLoadImagesFailure(errorCode) })
-                searchImagesCommand?.execute()
+
             } else {
-                getRecentImagesCommand = GetRecentImagesCommand(currentApiKey, numImagesPerPage, currentPageNum,
+                GetRecentImagesCommand(currentApiKey, numImagesPerPage, currentPageNum,
                         { list, pageNum, totalNumPages -> onLoadImagesSuccess(list, pageNum, totalNumPages) },
                         { errorCode -> onLoadImagesFailure(errorCode) })
-                getRecentImagesCommand?.execute()
+
             }
+            command?.execute()
         }
     }
 
