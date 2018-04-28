@@ -86,7 +86,7 @@ open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserCo
                     .into(holder.imageView)
         }
         holder.view.setOnClickListener {
-            presenter?.onSelectPreview(item.id, item.imageUrl)
+            presenter?.onSelectPreview(item.id, item.imageUrl, item.imageTitle)
         }
     }
 

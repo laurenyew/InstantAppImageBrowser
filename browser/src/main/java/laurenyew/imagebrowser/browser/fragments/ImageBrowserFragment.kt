@@ -1,6 +1,5 @@
 package laurenyew.imagebrowser.browser.fragments
 
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -9,12 +8,13 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import kotlinx.android.synthetic.main.image_browser_fragment.*
+import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
+import laurenyew.imagebrowser.browser.ImageBrowserFeatureModuleManager
 import laurenyew.imagebrowser.browser.R
-import laurenyew.imagebrowser.browser.activities.ImageDetailActivity
 import laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter
 import laurenyew.imagebrowser.browser.adapters.data.ImagePreviewDataWrapper
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserContract
-import laurenyew.imagebrowser.browser.presenters.ImageBrowserPresenter
+import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContract
 
 class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefreshLayout.OnRefreshListener {
     companion object {
@@ -35,7 +35,8 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = ImageBrowserPresenter()
+        val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java) ?: ImageBrowserFeatureModuleManager
+        presenter = module.getImageBrowserPresenter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -110,7 +111,7 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
         //show the first item
         if (shouldShowFirstItem && data != null && data.isNotEmpty()) {
             val firstItem = data[0]
-            presenter?.onSelectPreview(firstItem.id, firstItem.imageUrl)
+            presenter?.onSelectPreview(firstItem.id, firstItem.imageUrl, firstItem.imageTitle)
             shouldShowFirstItem = false
         }
     }
@@ -119,18 +120,22 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
         imageBrowserEmptyTextView.visibility = View.VISIBLE
     }
 
-    override fun onShowImageDetail(itemId: String, itemImageUrl: String) {
+    override fun onShowImageDetail(itemId: String, itemImageUrl: String, itemTitle: String?) {
         if (isRunningTwoPaneMode) {
-            val fragment = ImageDetailFragment.newInstance(itemId, itemImageUrl)
-            activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.imageDetailContainer, fragment)
-                    ?.commit()
-        } else {
-            val intent = Intent(context, ImageDetailActivity::class.java).apply {
-                putExtra(ImageDetailFragment.ARG_ITEM_ID, itemId)
-                putExtra(ImageDetailFragment.ARG_ITEM_IMAGE_URL, itemImageUrl)
+            val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java) ?: ImageBrowserFeatureModuleManager
+            val detailView = module.getImageDetailView(itemId, itemImageUrl, itemTitle)
+            if (detailView is Fragment) {
+                activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.imageDetailContainer, detailView)
+                        ?.commit()
             }
-            context?.startActivity(intent)
+        } else {
+            val context = context
+            if (context != null) {
+                val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java) ?: ImageBrowserFeatureModuleManager
+                val intent = module.getImageDetailActivity(context, itemId, itemImageUrl, itemTitle)
+                context.startActivity(intent)
+            }
         }
     }
     //endregion

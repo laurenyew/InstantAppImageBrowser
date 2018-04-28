@@ -1,15 +1,11 @@
 package laurenyew.imagebrowser.browser.contracts
 
-import android.content.Context
-
-interface ImageDetailContract {
-    interface View {
-        fun onDetailLoaded(title: String)
-    }
-
-    interface Presenter {
-        fun onBind(view: View, itemId: String?, context: Context?)
-
-        fun unBind()
+interface ImageDetailContract{
+    interface View{
+        companion object {
+            const val ARG_ITEM_ID = "item_id"
+            const val ARG_ITEM_IMAGE_URL = "item_image_url"
+            const val ARG_ITEM_IMAGE_TITLE = "item_image_title"
+        }
     }
 }

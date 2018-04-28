@@ -23,7 +23,7 @@ open class GetImagesCommand(private val apiKey: String, private val searchTerm: 
                             private val numImagesPerPage: Int,
                             private val pageNum: Int,
                             private val onSuccess: (List<ImageData>, Int, Int) -> Unit,
-                            private val onFailure: ((Int?) -> Unit)? = null) {
+                            private val onFailure: ((String?) -> Unit)? = null) {
     private var job: Thread? = null
     open fun execute() {
         job = Thread(Runnable {
@@ -44,7 +44,7 @@ open class GetImagesCommand(private val apiKey: String, private val searchTerm: 
                 if (photosResponse?.code() != 200 || photoPageData == null) {
                     //Post failure onto main thread
                     handler.post {
-                        onFailure?.invoke(photosResponse?.code())
+                        onFailure?.invoke(photosResponse?.code()?.toString())
                     }
                 } else {
                     val images = ArrayList<ImageData>()
@@ -58,6 +58,9 @@ open class GetImagesCommand(private val apiKey: String, private val searchTerm: 
                 }
             } catch (e: Exception) {
                 Log.d("GetImagesCommand", "Failed to get photos for searchTerm: $searchTerm", e)
+                handler.post {
+                    onFailure?.invoke(e.localizedMessage)
+                }
             }
         })
         job?.start()

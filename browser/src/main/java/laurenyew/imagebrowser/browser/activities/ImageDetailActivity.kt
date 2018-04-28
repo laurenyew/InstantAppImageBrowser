@@ -1,12 +1,18 @@
 package laurenyew.imagebrowser.browser.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.image_detail_activity.*
+import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
+import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList.getFeatureModuleManager
+import laurenyew.imagebrowser.browser.ImageBrowserFeatureModuleManager
 import laurenyew.imagebrowser.browser.R
-import laurenyew.imagebrowser.browser.fragments.ImageDetailFragment
+import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContract
+import laurenyew.imagebrowser.browser.contracts.ImageDetailContract
 
 /**
  * An activity representing a single imageDetail detail screen. This
@@ -15,7 +21,17 @@ import laurenyew.imagebrowser.browser.fragments.ImageDetailFragment
  * in a [ImageBrowserActivity].
  */
 open class ImageDetailActivity : AppCompatActivity() {
-    private val detailFragment = ImageDetailFragment()
+    companion object {
+        @JvmStatic
+        fun newInstance(context: Context, itemId: String, itemImageUrl: String, itemTitle: String? = null): Intent =
+                Intent(context, ImageDetailActivity::class.java).apply {
+                    putExtra(ImageDetailContract.View.ARG_ITEM_ID, itemId)
+                    putExtra(ImageDetailContract.View.ARG_ITEM_IMAGE_URL, itemImageUrl)
+                    if (itemTitle != null) {
+                        putExtra(ImageDetailContract.View.ARG_ITEM_IMAGE_TITLE, itemTitle)
+                    }
+                }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,16 +42,17 @@ open class ImageDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
-            detailFragment.apply {
-                arguments = Bundle().apply {
-                    putString(ImageDetailFragment.ARG_ITEM_ID, intent.getStringExtra(ImageDetailFragment.ARG_ITEM_ID))
-                    putString(ImageDetailFragment.ARG_ITEM_IMAGE_URL, intent.getStringExtra(ImageDetailFragment.ARG_ITEM_IMAGE_URL))
-                }
-            }
+            val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java) ?: ImageBrowserFeatureModuleManager
+            val itemId = intent.getStringExtra(ImageDetailContract.View.ARG_ITEM_ID)
+            val imageUrl = intent.getStringExtra(ImageDetailContract.View.ARG_ITEM_IMAGE_URL)
+            val itemTitle = intent.getStringExtra(ImageDetailContract.View.ARG_ITEM_IMAGE_TITLE)
+            val detailFragment = module.getImageDetailView(itemId, imageUrl, itemTitle)
 
-            supportFragmentManager.beginTransaction()
-                    .add(R.id.imageDetailContainer, detailFragment)
-                    .commit()
+            if (detailFragment is Fragment) {
+                supportFragmentManager.beginTransaction()
+                        .add(R.id.imageDetailContainer, detailFragment)
+                        .commit()
+            }
         }
     }
 

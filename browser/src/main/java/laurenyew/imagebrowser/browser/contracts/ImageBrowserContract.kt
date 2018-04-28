@@ -7,7 +7,7 @@ interface ImageBrowserContract {
     interface View {
         fun onImagesLoaded(data: List<ImagePreviewDataWrapper>?)
         fun onImagesFailedToLoad()
-        fun onShowImageDetail(itemId: String, itemImageUrl: String)
+        fun onShowImageDetail(itemId: String, itemImageUrl: String, itemTitle: String?)
     }
 
     interface Presenter {
@@ -28,6 +28,6 @@ interface ImageBrowserContract {
          */
         fun loadNextPageOfImages()
 
-        fun onSelectPreview(itemId: String, itemImageUrl: String)
+        fun onSelectPreview(itemId: String, itemImageUrl: String, itemTitle: String?)
     }
 }

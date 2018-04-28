@@ -83,8 +83,8 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
         }
     }
 
-    override fun onSelectPreview(itemId: String, itemImageUrl: String) {
-        view?.onShowImageDetail(itemId, itemImageUrl)
+    override fun onSelectPreview(itemId: String, itemImageUrl: String, itemTitle: String?) {
+        view?.onShowImageDetail(itemId, itemImageUrl, itemTitle)
     }
 
     //endregion
@@ -104,8 +104,8 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
             data = ArrayList()
         }
         //Add all the images
-        images?.forEach {
-            data.add(ImagePreviewDataWrapper(it.id, it.imageUrl))
+        images.forEach {
+            data.add(ImagePreviewDataWrapper(it.id, it.imageUrl, it.title))
         }
 
         //Update the view
@@ -115,10 +115,10 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
     /**
      * Update the view about the load failure
      */
-    open fun onLoadImagesFailure(errorCode: Int?) {
+    open fun onLoadImagesFailure(error: String?) {
         view?.onImagesLoaded(null)
         view?.onImagesFailedToLoad()
-        Log.d("ImageBrowserPresenter", "Load Images Failed. Error code: $errorCode")
+        Log.d("ImageBrowserPresenter", "Load Images Failed. Error: $error")
     }
     //endregion
 }
