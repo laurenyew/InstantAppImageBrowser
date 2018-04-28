@@ -1,5 +1,3 @@
-@file:Suppress("IllegalIdentifier")
-
 package laurenyew.imagebrowser.base.networking
 
 import laurenyew.imagebrowser.base.BuildConfig
@@ -31,7 +29,7 @@ class FlickrApiBuilderTest {
 
         /** Verify **/
         assertNotNull(okHttpClient)
-        assertEquals(1, okHttpClient.interceptors().size)
+        assertEquals(2, okHttpClient.interceptors().size)
         assertTrue(okHttpClient.followRedirects())
         assertTrue(okHttpClient.followSslRedirects())
     }

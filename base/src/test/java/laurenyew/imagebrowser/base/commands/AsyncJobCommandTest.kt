@@ -1,5 +1,3 @@
-@file:Suppress("IllegalIdentifier")
-
 package laurenyew.imagebrowser.base.commands
 
 import com.nhaarman.mockito_kotlin.spy

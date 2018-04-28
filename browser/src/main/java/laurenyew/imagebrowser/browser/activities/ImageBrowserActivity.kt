@@ -27,7 +27,7 @@ open class ImageBrowserActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.title = title
+        toolbar.title = getString(R.string.image_browser_title)
 
         setupFeatureModuleManager()
 

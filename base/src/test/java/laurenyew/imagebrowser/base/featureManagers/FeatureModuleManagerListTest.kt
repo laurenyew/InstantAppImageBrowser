@@ -1,5 +1,3 @@
-@file:Suppress("IllegalIdentifier")
-
 package laurenyew.imagebrowser.base.featureManagers
 
 import laurenyew.imagebrowser.base.BuildConfig

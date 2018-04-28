@@ -3,7 +3,9 @@
     package="laurenyew.imagebrowser.browser">
 
     <application
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".activities.ImageBrowserActivity"
             android:label="@string/image_browser_title"
