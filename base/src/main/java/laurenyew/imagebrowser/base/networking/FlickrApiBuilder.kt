@@ -1,5 +1,6 @@
 package laurenyew.imagebrowser.base.networking
 
+import android.support.annotation.VisibleForTesting
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
@@ -35,9 +36,7 @@ object FlickrApiBuilder {
         override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
         }
 
-        override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> {
-            return arrayOf()
-        }
+        override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> = arrayOf()
     })
 
     init {
@@ -47,9 +46,10 @@ object FlickrApiBuilder {
                 .client(okHttpClient.build()).build()
     }
 
-    fun <T> apiBuilder(apiClazz: Class<T>): T = retrofit.create(apiClazz)
+    fun <T> apiBuilder(apiClazz: Class<T>): T? = retrofit.create(apiClazz)
 
-    private fun setupOkHttp(): OkHttpClient.Builder {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun setupOkHttp(): OkHttpClient.Builder {
         //Setup HttpClient
         val httpClientBuilder = OkHttpClient.Builder()
         val httpLoggingInterceptor = HttpLoggingInterceptor()

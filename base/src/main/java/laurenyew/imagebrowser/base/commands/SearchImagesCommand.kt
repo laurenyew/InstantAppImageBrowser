@@ -24,7 +24,7 @@ open class SearchImagesCommand(private val apiKey: String, private val searchTer
                                private val onSuccess: (List<ImageData>, Int, Int) -> Unit,
                                private val onFailure: ((String?) -> Unit)? = null) : AsyncJobCommand() {
     private var _flickrApi = FlickrApiBuilder.apiBuilder(FlickrImageApi::class.java)
-    var flickrImageApi: FlickrImageApi
+    var flickrImageApi: FlickrImageApi?
         get() = _flickrApi
         @VisibleForTesting
         set(api) {
@@ -38,7 +38,7 @@ open class SearchImagesCommand(private val apiKey: String, private val searchTer
         extraArgs["privacy_filter"] = "1"
 
         try {
-            val photosCall = searchImagesApi.searchPhotos(apiKey, searchTerm, numImagesPerPage, pageNum, extraArgs)
+            val photosCall = searchImagesApi?.searchPhotos(apiKey, searchTerm, numImagesPerPage, pageNum, extraArgs)
             val photosResponse = photosCall?.execute()
             val photoPageData = photosResponse?.body()?.pageResponse
             if (photosResponse?.code() != 200 || photoPageData == null) {
