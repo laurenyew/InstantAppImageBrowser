@@ -16,21 +16,21 @@ import laurenyew.imagebrowser.base.networking.FlickrApiBuilder
  *
  * Failure function is optional
  */
-open class GetImagesCommand(private val apiKey: String, private val searchTerm: String,
-                            private val numImagesPerPage: Int,
-                            private val pageNum: Int,
-                            private val onSuccess: (List<ImageData>, Int, Int) -> Unit,
-                            private val onFailure: ((String?) -> Unit)? = null) {
+open class GetRecentImagesCommand(private val apiKey: String,
+                                  private val numImagesPerPage: Int,
+                                  private val pageNum: Int,
+                                  private val onSuccess: (List<ImageData>, Int, Int) -> Unit,
+                                  private val onFailure: ((String?) -> Unit)? = null) {
     private var job: Thread? = null
     open fun execute() {
         job = Thread(Runnable {
             val handler = Handler(Looper.getMainLooper())
-            val getImagesApi = FlickrApiBuilder.apiBuilder(FlickrImageApi::class.java)
+            val getRecentImagesApi = FlickrApiBuilder.apiBuilder(FlickrImageApi::class.java)
             val extraArgs = HashMap<String, String>()
             extraArgs["privacy_filter"] = "1"
 
             try {
-                val photosCall = getImagesApi.searchPhotos(apiKey, searchTerm, numImagesPerPage, pageNum, extraArgs)
+                val photosCall = getRecentImagesApi.getRecentPhotos(apiKey, numImagesPerPage, pageNum, extraArgs)
                 val photosResponse = photosCall?.execute()
                 val photoPageData = photosResponse?.body()?.pageResponse
                 if (photosResponse?.code() != 200 || photoPageData == null) {
@@ -49,7 +49,7 @@ open class GetImagesCommand(private val apiKey: String, private val searchTerm: 
                     }
                 }
             } catch (e: Exception) {
-                Log.d("GetImagesCommand", "Failed to get photos for searchTerm: $searchTerm", e)
+                Log.d("GetRecentImagesCommand", "Failed to get popular photos", e)
                 handler.post {
                     onFailure?.invoke(e.localizedMessage)
                 }

@@ -14,4 +14,11 @@ interface FlickrImageApi {
                      @Query("page") pageNum: Int = 1,
                      @QueryMap queryArgs: Map<String, String>? = null)
             : Call<FlickrPhotosResponse?>?
+
+    @GET("rest/?method=flickr.photos.getRecent&format=json&&nojsoncallback=1")
+    fun getRecentPhotos(@Query("api_key") apiKey: String,
+                        @Query("per_page") numPhotosPerPage: Int,
+                        @Query("page") pageNum: Int = 1,
+                        @QueryMap queryArgs: Map<String, String>? = null)
+            : Call<FlickrPhotosResponse?>?
 }

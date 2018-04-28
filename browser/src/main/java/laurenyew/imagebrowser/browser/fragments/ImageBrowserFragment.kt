@@ -27,7 +27,7 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
      * device.
      */
     private var isRunningTwoPaneMode: Boolean = false
-    private var searchTerm: String = "tomato"
+    private var searchTerm: String = ""
     private var shouldShowFirstItem = true
 
     private var adapter: ImageBrowserRecyclerViewAdapter? = null
@@ -35,7 +35,8 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java) ?: ImageBrowserFeatureModuleManager
+        val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+                ?: ImageBrowserFeatureModuleManager
         presenter = module.getImageBrowserPresenter()
     }
 
@@ -122,7 +123,8 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
 
     override fun onShowImageDetail(itemId: String, itemImageUrl: String, itemTitle: String?) {
         if (isRunningTwoPaneMode) {
-            val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java) ?: ImageBrowserFeatureModuleManager
+            val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+                    ?: ImageBrowserFeatureModuleManager
             val detailView = module.getImageDetailView(itemId, itemImageUrl, itemTitle)
             if (detailView is Fragment) {
                 activity?.supportFragmentManager?.beginTransaction()
@@ -132,7 +134,8 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
         } else {
             val context = context
             if (context != null) {
-                val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java) ?: ImageBrowserFeatureModuleManager
+                val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+                        ?: ImageBrowserFeatureModuleManager
                 val intent = module.getImageDetailActivity(context, itemId, itemImageUrl, itemTitle)
                 context.startActivity(intent)
             }
