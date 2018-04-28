@@ -28,7 +28,9 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //Networking
-    api 'com.squareup.retrofit2:retrofit:2.4.0'
+    api("com.squareup.retrofit2:retrofit:2.4.0") {
+        exclude module: 'okhttp'
+    }
     api 'com.squareup.okhttp3:okhttp:3.10.0'
     api 'com.squareup.okhttp3:okhttp-urlconnection:3.10.0'
     //Retrofit no longer comes with default logging
@@ -45,6 +47,12 @@ dependencies {
     //UI
     api 'com.android.support:appcompat-v7:27.1.1'
     api 'com.android.support.constraint:constraint-layout:1.1.0'
+
+    //Unit tests
+    testImplementation 'junit:junit:4.12'
+    testImplementation "com.nhaarman:mockito-kotlin:1.5.0"
+    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation "org.robolectric:shadows-support-v4:3.4-rc2"
 }
 repositories {
     mavenCentral()

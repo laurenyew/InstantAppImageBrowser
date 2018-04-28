@@ -1,7 +1,6 @@
 package laurenyew.imagebrowser.base.api.response
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.Moshi
 
 /**
  * JSON Responses expected from the flickr api

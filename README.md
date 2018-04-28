@@ -33,3 +33,4 @@ h2. Third Party Libraries:
 * Okhttp3 (Networking)
 * Moshi (Json parsing)
 * Picasso (Images)
+* Mockito-Kotlin (Unit testing helper for Kotlin)

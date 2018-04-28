@@ -23,9 +23,17 @@ open class SearchImagesCommand(private val apiKey: String, private val searchTer
                                private val pageNum: Int,
                                private val onSuccess: (List<ImageData>, Int, Int) -> Unit,
                                private val onFailure: ((String?) -> Unit)? = null) : AsyncJobCommand() {
-    override fun commandImpl() {
+    private var _flickrApi = FlickrApiBuilder.apiBuilder(FlickrImageApi::class.java)
+    var flickrImageApi: FlickrImageApi
+        get() = _flickrApi
+        @VisibleForTesting
+        set(api) {
+            _flickrApi = api
+        }
+
+    override fun executeCommandImpl() {
         val handler = Handler(Looper.getMainLooper())
-        val searchImagesApi = getFlickrApi()
+        val searchImagesApi = flickrImageApi
         val extraArgs = HashMap<String, String>()
         extraArgs["privacy_filter"] = "1"
 
@@ -55,7 +63,4 @@ open class SearchImagesCommand(private val apiKey: String, private val searchTer
             }
         }
     }
-
-    @VisibleForTesting
-    fun getFlickrApi(): FlickrImageApi = FlickrApiBuilder.apiBuilder(FlickrImageApi::class.java)
 }

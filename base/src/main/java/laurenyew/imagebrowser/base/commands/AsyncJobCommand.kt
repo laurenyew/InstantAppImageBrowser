@@ -1,5 +1,7 @@
 package laurenyew.imagebrowser.base.commands
 
+import android.support.annotation.VisibleForTesting
+
 /**
  * Base abstract class to run commands.
  * Execute will run the command implementation in a background runnable thread
@@ -7,18 +9,20 @@ package laurenyew.imagebrowser.base.commands
  * Splitting up for use in unit tests
  */
 abstract class AsyncJobCommand {
-    private var job: Thread? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var job: Thread? = null
 
     open fun execute() {
         job = Thread(Runnable {
-            commandImpl()
+            executeCommandImpl()
         })
         job?.start()
     }
 
-    abstract fun commandImpl()
+    abstract fun executeCommandImpl()
 
     open fun cancel() {
         job?.interrupt()
+        job = null
     }
 }
