@@ -21,7 +21,8 @@ import kotlin.collections.ArrayList
  */
 open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserContract.Presenter?) : RecyclerView.Adapter<ImagePreviewViewHolder>() {
     private var data: MutableList<ImagePreviewDataWrapper> = ArrayList()
-    private var pendingDataUpdates = ArrayDeque<List<ImagePreviewDataWrapper>>()
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var pendingDataUpdates = ArrayDeque<List<ImagePreviewDataWrapper>>()
 
     //RecyclerView Diff.Util (List Updates)
     open fun updateData(newData: List<ImagePreviewDataWrapper>?) {
@@ -32,8 +33,8 @@ open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserCo
         }
     }
 
-    @VisibleForTesting
-    fun updateDataInternal(newData: List<ImagePreviewDataWrapper>?) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    open fun updateDataInternal(newData: List<ImagePreviewDataWrapper>?) {
         val oldData = ArrayList(data)
 
         val handler = Handler()
@@ -47,8 +48,8 @@ open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserCo
         }).start()
     }
 
-    @VisibleForTesting
-    fun applyDataDiffResult(newData: List<ImagePreviewDataWrapper>?, diffResult: DiffUtil.DiffResult) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    open fun applyDataDiffResult(newData: List<ImagePreviewDataWrapper>?, diffResult: DiffUtil.DiffResult) {
         if (pendingDataUpdates.isNotEmpty()) {
             pendingDataUpdates.remove()
         }

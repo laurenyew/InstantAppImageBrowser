@@ -5,6 +5,6 @@ import android.view.View
 import android.widget.ImageView
 import laurenyew.imagebrowser.browser.R
 
-open class ImagePreviewViewHolder(val view: View): RecyclerView.ViewHolder(view){
-    val imageView = view.findViewById<ImageView>(R.id.previewImageView)
+open class ImagePreviewViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    val imageView: ImageView? = view.findViewById<ImageView?>(R.id.previewImageView)
 }

@@ -19,13 +19,9 @@ open class ImageDiffCallback(private val oldData: List<ImagePreviewDataWrapper>?
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        var areContentsTheSame = areItemsTheSame(oldItemPosition, newItemPosition)
-        if (!areContentsTheSame) {
-            val oldItem = oldData?.get(oldItemPosition)
-            val newItem = newData?.get(newItemPosition)
+        val oldItem = oldData?.get(oldItemPosition)
+        val newItem = newData?.get(newItemPosition)
 
-            areContentsTheSame = oldItem?.imageUrl == newItem?.imageUrl
-        }
-        return areContentsTheSame
+        return oldItem?.imageUrl == newItem?.imageUrl && oldItem?.imageTitle == newItem?.imageTitle
     }
 }
