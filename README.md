@@ -27,6 +27,7 @@ h2. Features:
 * Pull to Refresh + Accessiblity [x]
 * Navigation to and from home page [x]
 * Reusable / Extensible [x]
+* Debug Feature: Recent Item Browser + Default Search Browser [x]
 
 h2. Third Party Libraries:
 * Retrofit (Networking)

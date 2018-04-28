@@ -1,5 +1,6 @@
 package laurenyew.imagebrowser.browser.fragments
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import kotlinx.android.synthetic.main.image_browser_fragment.*
+import laurenyew.imagebrowser.base.SharedPrefConfig
 import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
 import laurenyew.imagebrowser.browser.ImageBrowserFeatureModuleManager
 import laurenyew.imagebrowser.browser.R
@@ -27,7 +29,7 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
      * device.
      */
     private var isRunningTwoPaneMode: Boolean = false
-    private var searchTerm: String = ""
+    private var searchTerm: String? = null
     private var shouldShowFirstItem = true
 
     private var adapter: ImageBrowserRecyclerViewAdapter? = null
@@ -146,7 +148,21 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
     //region SwipeRefreshLayout
     override fun onRefresh() {
         shouldShowFirstItem = isRunningTwoPaneMode
-        presenter?.refreshImages(searchTerm)
+        presenter?.refreshImages(searchTerm ?: getDefaultSearchTerm())
+    }
+    //endregion
+
+    //region Helper Methods
+    private fun getDefaultSearchTerm(): String {
+        val context = context
+        if (context != null) {
+            val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+            val shouldShowRecentItems = sharedPrefs.getBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, false)
+            if (!shouldShowRecentItems) {
+                return context.getString(R.string.image_browser_base_search_term) ?: ""
+            }
+        }
+        return ""
     }
     //endregion
 }
