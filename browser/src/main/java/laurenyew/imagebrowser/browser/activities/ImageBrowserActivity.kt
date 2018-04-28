@@ -1,8 +1,10 @@
 package laurenyew.imagebrowser.browser.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.image_browser_activity.*
 import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
 import laurenyew.imagebrowser.browser.ImageBrowserFeatureModuleManager
@@ -24,12 +26,14 @@ open class ImageBrowserActivity : AppCompatActivity() {
         setContentView(R.layout.image_browser_activity)
 
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.title = title
 
         setupFeatureModuleManager()
 
         //Show the view
-        val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java) ?: ImageBrowserFeatureModuleManager
+        val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+                ?: ImageBrowserFeatureModuleManager
         val browserView = module.getImageBrowserView()
         if (browserView is Fragment) {
             supportFragmentManager.beginTransaction()
@@ -41,4 +45,13 @@ open class ImageBrowserActivity : AppCompatActivity() {
     open fun setupFeatureModuleManager() {
         FeatureModuleManagerList.addFeatureModuleManager(ImageBrowserFeatureModuleManager)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem) =
+            when (item.itemId) {
+                android.R.id.home -> {
+                    navigateUpTo(Intent(this, ImageBrowserActivity::class.java))
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
 }

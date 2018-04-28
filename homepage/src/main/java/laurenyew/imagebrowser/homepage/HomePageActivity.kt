@@ -18,6 +18,7 @@ open class HomePageActivity : AppCompatActivity() {
             startActivity(Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://laurenyew.imagebrowser.com/imagebrowser")).apply {
                 addCategory(Intent.CATEGORY_BROWSABLE)
+                `package` = packageName
             })
         }
     }
