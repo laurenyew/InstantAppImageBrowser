@@ -4,7 +4,7 @@ import android.support.v7.util.DiffUtil
 
 /**
  * DiffUtil.Callback that compares image preview data wrappers
- * (Used in {@link laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter}
+ * (Used in [laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter]
  */
 open class ImageDiffCallback(private val oldData: List<ImagePreviewDataWrapper>?, private val newData: List<ImagePreviewDataWrapper>?) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldData?.size ?: 0

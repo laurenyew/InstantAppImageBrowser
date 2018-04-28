@@ -1,5 +1,7 @@
 package laurenyew.imagebrowser.base.featureManagers
 
+import android.support.annotation.VisibleForTesting
+
 /**
  * Feature Module Manager List
  * Created to allow for easy extension of Views, Presenters, etc. for each feature
@@ -7,7 +9,8 @@ package laurenyew.imagebrowser.base.featureManagers
  * feature module manager rather than the default
  */
 object FeatureModuleManagerList {
-    private val managers: ArrayList<FeatureModuleManager> = ArrayList()
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val managers: ArrayList<FeatureModuleManager> = ArrayList()
 
     @Suppress("UNCHECKED_CAST")
     fun <A> getFeatureModuleManager(clazz: Class<*>): A? {
@@ -21,13 +24,14 @@ object FeatureModuleManagerList {
         managers.add(manager)
     }
 
-    fun removeFeatureModuleManager(manager: FeatureModuleManager) {
-        managers.remove(manager)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun clear() {
+        managers.clear()
     }
 }
 
 /**
  * Base FeatureModuleManager class that should be extended by
- * andy FeatureModuleManager
+ * every FeatureModuleManager (used by [FeatureModuleManagerList])
  */
 open class FeatureModuleManager
