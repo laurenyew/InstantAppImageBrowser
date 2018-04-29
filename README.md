@@ -47,3 +47,12 @@ h2. Future Considerations
 
 h2. Resources
 * App icons generated with: https://romannurik.github.io/AndroidAssetStudio/icons-generic.html
+
+h2. Architecture Notes
+* Base Module:
+** Networking 
+** Data Models
+** FeatureModuleManager
+* Feature Modules:
+** HomePage
+** Browser (Image Browser)
