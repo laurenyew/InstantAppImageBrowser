@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.image_browser_activity.*
+import laurenyew.imagebrowser.base.ImageBrowserConfig
 import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
 import laurenyew.imagebrowser.browser.ImageBrowserFeatureModuleManager
 import laurenyew.imagebrowser.browser.R
@@ -27,14 +28,15 @@ open class ImageBrowserActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.title = getString(laurenyew.imagebrowser.base.R.string.image_browser_title)
+        supportActionBar?.title = getString(laurenyew.imagebrowser.base.R.string.image_browser_title)
 
         setupFeatureModuleManager()
 
         //Show the view
-        val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+        val module: ImageBrowserFeatureModuleContract.Views = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Views::class.java)
                 ?: ImageBrowserFeatureModuleManager
-        val browserView = module.getImageBrowserView()
+        val searchTerm = intent.getStringExtra(ImageBrowserConfig.ARG_SEARCH_TERM)
+        val browserView = module.getImageBrowserView(searchTerm)
         if (browserView is Fragment) {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.imageBrowserFrameLayout, browserView, FRAGMENT_TAG)

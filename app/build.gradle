@@ -23,6 +23,7 @@ android {
 }
 
 dependencies {
+    implementation project(':search')
     implementation project(':browser')
     implementation project(':homepage')
     implementation project(':base')

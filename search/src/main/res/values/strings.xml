@@ -1,0 +1,9 @@
+<resources>
+    <string name="search_suggestions_page_title">Products</string>
+    <string name="welcome_message">"Welcome to the Image Browser App.\nPlease select from a suggested product to search."</string>
+    <string name="all_products_button_title">All Produce</string>
+    <string name="suggestion_button_title_1">Fruit</string>
+    <string name="suggestion_button_title_2">Vegetables</string>
+    <string name="suggestion_button_title_3">Meat</string>
+    <string name="suggestion_button_title_4">Bread</string>
+</resources>

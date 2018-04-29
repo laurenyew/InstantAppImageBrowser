@@ -55,8 +55,8 @@ open class ImageDetailFragment : Fragment(), ImageDetailContract.View {
         if (itemImageUrl != null) {
             Picasso.get()
                     .load(itemImageUrl)
-                    .placeholder(R.drawable.image_placeholder)
-                    .error(R.drawable.image_placeholder)
+                    .placeholder(laurenyew.imagebrowser.base.R.drawable.image_placeholder)
+                    .error(laurenyew.imagebrowser.base.R.drawable.image_placeholder)
                     .into(detailImageView)
         }
 

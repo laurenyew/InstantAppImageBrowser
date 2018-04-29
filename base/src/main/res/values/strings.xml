@@ -2,5 +2,7 @@
     <string name="app_name">ImageBrowser</string>
     <string name="image_browser_title">Image Browser</string>
     <string name="image_detail_title">Image Detail</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Search for products…</string>
     <string name="debug">Debug</string>
 </resources>

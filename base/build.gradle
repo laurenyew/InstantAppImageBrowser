@@ -27,7 +27,8 @@ android {
 dependencies {
     application project(':app')
 
-    feature project(':browser')
+    feature project(":search")
+    feature project(":browser")
     feature project(":homepage")
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -47,6 +48,7 @@ dependencies {
     api "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
 
     //Android Support
+    api "com.android.support:design:$androidSupportVersion"
     api "com.android.support:support-v4:$androidSupportVersion"
     api "com.android.support:appcompat-v7:$androidSupportVersion"
     api "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"

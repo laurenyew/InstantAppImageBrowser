@@ -38,5 +38,13 @@ open class HomePageActivity : AppCompatActivity() {
                 `package` = packageName
             })
         }
+
+        openSearchImageBrowserButton.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://laurenyew.imagebrowser.com/search")).apply {
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                `package` = packageName
+            })
+        }
     }
 }

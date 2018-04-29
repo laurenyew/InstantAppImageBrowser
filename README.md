@@ -16,7 +16,8 @@ Instant App Image Browser (Flickr)
 - [x] Tablet / Phone Multi screen
 - [x] Paging
 - [x] Infinite scroll Paging (load next page when reach end of current list) 
-- [ ] Image Search (2nd feature?)
+- [x] Image Search
+- [x] Search Suggestions Feature (2nd Feature Module)
 
 ## Features:
 - [x] Instant App Architecture
@@ -45,15 +46,24 @@ Instant App Image Browser (Flickr)
 * Moving page cache (don't keep all the paged data for space reasons)
 * Offline version 
 * Google Room POC w/ Observables + MVVM
+	* Pre-search, update view
+* Initial Fetch images animated progress screen
 
 ## Resources
 * App icons generated with: https://romannurik.github.io/AndroidAssetStudio/icons-generic.html
 
 ## Architecture Notes
-- Base Module:
--- Networking 
--- Data Models
--- FeatureModuleManager
-- Feature Modules:
--- HomePage
--- Browser (Image Browser)
+* Base Module:
+	* Networking 
+	* Data Models
+	* FeatureModuleManager
+* Feature Modules:
+	* HomePage
+	* Browser (Image Browser)
+		* Includes Search
+		* Search keyboard hides on scroll so still have context on what searching for
+	* Search (Search / Suggestions Feature)
+		* Search toolbar collapses if click outside of search view
+
+## Notes
+* If user rotates, search is cleared and default 'search' browser is loaded 

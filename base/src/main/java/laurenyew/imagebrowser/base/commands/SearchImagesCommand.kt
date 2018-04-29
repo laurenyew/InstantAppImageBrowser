@@ -36,6 +36,9 @@ open class SearchImagesCommand(private val apiKey: String, private val searchTer
         val searchImagesApi = flickrImageApi
         val extraArgs = HashMap<String, String>()
         extraArgs["privacy_filter"] = "1"
+        extraArgs["safe_search"] = "2" //Moderate Safe search
+        extraArgs["content_type"] = "1" //Photos only
+        extraArgs["sort"] = "relevance"
 
         try {
             val photosCall = searchImagesApi?.searchPhotos(apiKey, searchTerm, numImagesPerPage, pageNum, extraArgs)

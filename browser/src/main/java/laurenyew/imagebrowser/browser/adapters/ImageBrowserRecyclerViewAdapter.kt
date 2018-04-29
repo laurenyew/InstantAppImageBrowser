@@ -85,8 +85,8 @@ open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserCo
         if (holder.imageView != null) {
             Picasso.get()
                     .load(itemImageUrl)
-                    .placeholder(R.drawable.image_placeholder)
-                    .error(R.drawable.image_placeholder)
+                    .placeholder(laurenyew.imagebrowser.base.R.drawable.image_placeholder)
+                    .error(laurenyew.imagebrowser.base.R.drawable.image_placeholder)
                     .into(holder.imageView)
         }
         holder.view.setOnClickListener {

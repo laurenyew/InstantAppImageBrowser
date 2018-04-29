@@ -32,13 +32,9 @@ android {
 dependencies {
     implementation project(':base')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-
-    //Android Support
+    //Android Support Version
     //noinspection GradleCompatible
-    implementation "com.android.support:support-v4:$androidSupportVersion"
     implementation "com.android.support:recyclerview-v7:$androidSupportVersion"
-    implementation "com.android.support:design:$androidSupportVersion"
 
     //Third Party
     implementation "com.squareup.picasso:picasso:$picassoVersion"

@@ -7,7 +7,6 @@ import laurenyew.imagebrowser.base.commands.AsyncJobCommand
 import laurenyew.imagebrowser.base.commands.GetRecentImagesCommand
 import laurenyew.imagebrowser.base.commands.SearchImagesCommand
 import laurenyew.imagebrowser.base.model.ImageData
-import laurenyew.imagebrowser.browser.R
 import laurenyew.imagebrowser.browser.adapters.data.ImagePreviewDataWrapper
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserContract
 import java.lang.ref.WeakReference
@@ -54,7 +53,7 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
 
     override fun onBind(view: ImageBrowserContract.View, context: Context?) {
         viewRef = WeakReference(view)
-        apiKey = context?.getString(R.string.flickr_api_key)
+        apiKey = context?.getString(laurenyew.imagebrowser.base.R.string.flickr_api_key)
     }
 
     override fun unBind() {

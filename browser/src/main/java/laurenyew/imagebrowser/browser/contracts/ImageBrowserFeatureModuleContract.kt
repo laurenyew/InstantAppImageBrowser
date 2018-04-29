@@ -2,25 +2,25 @@ package laurenyew.imagebrowser.browser.contracts
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.widget.RecyclerView
 import laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter
 
 interface ImageBrowserFeatureModuleContract {
 
-    //region Activities
-    fun getImageDetailActivity(context: Context, itemId: String, itemImageUrl: String, itemTitle: String? = null): Intent
-    //endregion
+    interface Activities {
+        fun getImageDetailActivity(context: Context, itemId: String, itemImageUrl: String, itemTitle: String? = null): Intent
+    }
 
-    //region Views
-    fun getImageBrowserView(): ImageBrowserContract.View
+    interface Views {
+        fun getImageBrowserView(searchTerm: String?): ImageBrowserContract.View
 
-    fun getImageDetailView(itemId: String, itemImageUrl: String, itemTitle: String? = null): ImageDetailContract.View
-    //endregion
+        fun getImageDetailView(itemId: String, itemImageUrl: String, itemTitle: String? = null): ImageDetailContract.View
+    }
 
-    //region Presenters
-    fun getImageBrowserPresenter(): ImageBrowserContract.Presenter
-    //endregion
+    interface Presenters {
+        fun getImageBrowserPresenter(): ImageBrowserContract.Presenter
+    }
 
-    //region Adapters
-    fun getImageBrowserAdapter(presenter: ImageBrowserContract.Presenter?): ImageBrowserRecyclerViewAdapter
+    interface Adapters {
+        fun getImageBrowserAdapter(presenter: ImageBrowserContract.Presenter?): ImageBrowserRecyclerViewAdapter
+    }
 }

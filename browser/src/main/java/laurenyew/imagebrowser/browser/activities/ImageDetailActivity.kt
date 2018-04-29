@@ -41,7 +41,7 @@ open class ImageDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
-            val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+            val module: ImageBrowserFeatureModuleContract.Views = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Views::class.java)
                     ?: ImageBrowserFeatureModuleManager
             val itemId = intent.getStringExtra(ImageDetailContract.View.ARG_ITEM_ID)
             val imageUrl = intent.getStringExtra(ImageDetailContract.View.ARG_ITEM_IMAGE_URL)
