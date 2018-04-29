@@ -15,7 +15,7 @@ h2. Optional:
 * Detail Image View [x]
 * Tablet / Phone Multi screen [x]
 * Paging [x]
-* Infinite scroll Paging [ ]
+* Infinite scroll Paging (load next page when reach end of current list) [x]
 * Image Search (2nd feature?) [ ]
 
 h2. Features:
@@ -38,3 +38,8 @@ h2. Third Party Libraries:
 * Moshi (Json parsing)
 * Picasso (Images)
 * Mockito-Kotlin (Unit testing helper for Kotlin)
+
+h2. Future Considerations
+* Smooth Scroll Paging (pre-load)
+* Moving page cache (don't keep all the paged data for space reasons)
+* Offline version + Google Room POC w/ Observables + MVVM
