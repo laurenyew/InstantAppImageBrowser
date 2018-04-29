@@ -2,11 +2,11 @@ package laurenyew.imagebrowser.browser.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.image_detail_activity.*
 import kotlinx.android.synthetic.main.image_detail_fragment.*
 import laurenyew.imagebrowser.browser.R
 import laurenyew.imagebrowser.browser.contracts.ImageDetailContract
@@ -60,7 +60,8 @@ open class ImageDetailFragment : Fragment(), ImageDetailContract.View {
                     .into(detailImageView)
         }
 
-        activity?.toolbar?.title = itemTitle
+        val supportActivityCompat = activity as AppCompatActivity?
+        supportActivityCompat?.supportActionBar?.title = itemTitle
         detailImageTitleTextView.text = itemTitle
     }
 }
