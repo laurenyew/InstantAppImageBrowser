@@ -3,6 +3,7 @@ package laurenyew.imagebrowser.browser.fragments
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
@@ -28,18 +29,22 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private var isRunningTwoPaneMode: Boolean = false
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var isRunningTwoPaneMode: Boolean = false
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var shouldShowFirstItem = true
+
     private var searchTerm: String? = null
-    private var shouldShowFirstItem = true
 
     private var adapter: ImageBrowserRecyclerViewAdapter? = null
+    private var module: ImageBrowserFeatureModuleContract? = null
     private var presenter: ImageBrowserContract.Presenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+        module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
                 ?: ImageBrowserFeatureModuleManager
-        presenter = module.getImageBrowserPresenter()
+        presenter = module?.getImageBrowserPresenter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -83,6 +88,7 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
     override fun onDestroy() {
         super.onDestroy()
         presenter = null
+        module = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -104,15 +110,17 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
      */
     override fun onImagesLoaded(data: List<ImagePreviewDataWrapper>?) {
         if (adapter == null) {
-            adapter = ImageBrowserRecyclerViewAdapter(presenter)
+            adapter = module?.getImageBrowserAdapter(presenter)
             imageBrowserRecyclerView.adapter = adapter
         }
         adapter?.updateData(data)
         imageBrowserSwipeRefreshLayout.isRefreshing = false
 
-        //if this view has just been refreshed, we should
-        //show the first item
-        if (shouldShowFirstItem && data != null && data.isNotEmpty()) {
+        if (data == null || data.isEmpty()) {
+            imageBrowserEmptyTextView.visibility = View.VISIBLE
+        } else if (shouldShowFirstItem) {
+            //if this view has just been refreshed, we should
+            //show the first item
             val firstItem = data[0]
             presenter?.onSelectPreview(firstItem.id, firstItem.imageUrl, firstItem.imageTitle)
             shouldShowFirstItem = false
@@ -125,7 +133,7 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
 
     override fun onShowImageDetail(itemId: String, itemImageUrl: String, itemTitle: String?) {
         if (isRunningTwoPaneMode) {
-            val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+            val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
                     ?: ImageBrowserFeatureModuleManager
             val detailView = module.getImageDetailView(itemId, itemImageUrl, itemTitle)
             if (detailView is Fragment) {
@@ -136,7 +144,7 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
         } else {
             val context = context
             if (context != null) {
-                val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+                val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
                         ?: ImageBrowserFeatureModuleManager
                 val intent = module.getImageDetailActivity(context, itemId, itemImageUrl, itemTitle)
                 context.startActivity(intent)
@@ -153,7 +161,8 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
     //endregion
 
     //region Helper Methods
-    private fun getDefaultSearchTerm(): String {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun getDefaultSearchTerm(): String {
         val context = context
         if (context != null) {
             val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)

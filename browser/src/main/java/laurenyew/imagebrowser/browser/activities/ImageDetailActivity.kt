@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.image_detail_activity.*
 import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
-import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList.getFeatureModuleManager
 import laurenyew.imagebrowser.browser.ImageBrowserFeatureModuleManager
 import laurenyew.imagebrowser.browser.R
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContract
@@ -42,7 +41,8 @@ open class ImageDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
-            val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java) ?: ImageBrowserFeatureModuleManager
+            val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+                    ?: ImageBrowserFeatureModuleManager
             val itemId = intent.getStringExtra(ImageDetailContract.View.ARG_ITEM_ID)
             val imageUrl = intent.getStringExtra(ImageDetailContract.View.ARG_ITEM_IMAGE_URL)
             val itemTitle = intent.getStringExtra(ImageDetailContract.View.ARG_ITEM_IMAGE_TITLE)

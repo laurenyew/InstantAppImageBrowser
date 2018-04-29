@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManager
 import laurenyew.imagebrowser.browser.activities.ImageDetailActivity
+import laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserContract
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContract
 import laurenyew.imagebrowser.browser.contracts.ImageDetailContract
@@ -25,5 +26,9 @@ object ImageBrowserFeatureModuleManager : FeatureModuleManager(), ImageBrowserFe
 
     //region Presenters
     override fun getImageBrowserPresenter(): ImageBrowserContract.Presenter = ImageBrowserPresenter()
+    //endregion
+
+    //region Adapters
+    override fun getImageBrowserAdapter(presenter: ImageBrowserContract.Presenter?): ImageBrowserRecyclerViewAdapter = ImageBrowserRecyclerViewAdapter(presenter)
     //endregion
 }

@@ -32,7 +32,7 @@ open class ImageBrowserActivity : AppCompatActivity() {
         setupFeatureModuleManager()
 
         //Show the view
-        val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+        val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
                 ?: ImageBrowserFeatureModuleManager
         val browserView = module.getImageBrowserView()
         if (browserView is Fragment) {
