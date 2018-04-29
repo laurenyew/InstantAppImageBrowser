@@ -1,0 +1,62 @@
+apply plugin: 'com.android.feature'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 27
+    baseFeature true
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        project.ext["lintIgnore"].each { disable it }
+        abortOnError false
+        checkReleaseBuilds true
+    }
+}
+
+dependencies {
+    application project(':app')
+
+    feature project(':browser')
+    feature project(":homepage")
+
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    //Networking
+    api("com.squareup.retrofit2:retrofit:$retrofitVersion") {
+        exclude module: 'okhttp'
+    }
+    api "com.squareup.okhttp3:okhttp:$okhttp3Version"
+    api "com.squareup.okhttp3:okhttp-urlconnection:$okhttp3Version"
+    //Retrofit no longer comes with default logging
+    api "com.squareup.okhttp3:logging-interceptor:$okhttp3Version"
+
+    //Parsing Json Data
+    api "com.squareup.moshi:moshi:$moshiVersion"
+    api "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+    api "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+
+    //Android Support
+    api "com.android.support:support-v4:$androidSupportVersion"
+    api "com.android.support:appcompat-v7:$androidSupportVersion"
+    api "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
+
+    //Unit tests
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "org.robolectric:shadows-support-v4:$robolectricShadowsVersion"
+}
+repositories {
+    mavenCentral()
+}

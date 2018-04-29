@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="laurenyew.imagebrowser.browser">
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/image_browser_ic_launcher"
+        android:roundIcon="@mipmap/image_browser_ic_launcher_round"
+        android:supportsRtl="true">
+        <activity
+            android:name=".activities.ImageBrowserActivity"
+            android:label="@string/image_browser_title"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter android:order="1">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="laurenyew.imagebrowser.com"
+                    android:pathPattern="/imagebrowser"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.ImageDetailActivity"
+            android:label="@string/image_detail_title"
+            android:parentActivityName=".activities.ImageBrowserActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="laurenyew.imagebrowser.browser.activities.ImageBrowserActivity" />
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="open_image_browser_button_title">Open Image Browser</string>
+    <string name="should_show_recent_items_checkbox_title">Show Recent Items on Empty Search</string>
+</resources>

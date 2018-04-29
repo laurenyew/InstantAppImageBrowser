@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="list_size">400dp</dimen>
+    <dimen name="item_size">200dp</dimen>
+    <dimen name="item_detail_size">400dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+</resources>
