@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.Toast
 import kotlinx.android.synthetic.main.image_browser_fragment.*
 import laurenyew.imagebrowser.base.SharedPrefConfig
 import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
@@ -109,45 +110,51 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
      * Load the images into the view
      */
     override fun onImagesLoaded(data: List<ImagePreviewDataWrapper>?) {
-        if (adapter == null) {
-            adapter = module?.getImageBrowserAdapter(presenter)
-            imageBrowserRecyclerView.adapter = adapter
-        }
-        adapter?.updateData(data)
-        imageBrowserSwipeRefreshLayout.isRefreshing = false
+        if (isAdded && isVisible) {
+            if (adapter == null) {
+                adapter = module?.getImageBrowserAdapter(presenter)
+                imageBrowserRecyclerView.adapter = adapter
+            }
+            adapter?.updateData(data)
+            imageBrowserSwipeRefreshLayout.isRefreshing = false
 
-        if (data == null || data.isEmpty()) {
-            imageBrowserEmptyTextView.visibility = View.VISIBLE
-        } else if (shouldShowFirstItem) {
-            //if this view has just been refreshed, we should
-            //show the first item
-            val firstItem = data[0]
-            presenter?.onSelectPreview(firstItem.id, firstItem.imageUrl, firstItem.imageTitle)
-            shouldShowFirstItem = false
+            if (data == null || data.isEmpty()) {
+                imageBrowserEmptyTextView.visibility = View.VISIBLE
+            } else if (shouldShowFirstItem) {
+                //if this view has just been refreshed, we should
+                //show the first item
+                val firstItem = data[0]
+                presenter?.onSelectPreview(firstItem.id, firstItem.imageUrl, firstItem.imageTitle)
+                shouldShowFirstItem = false
+            }
         }
     }
 
     override fun onImagesFailedToLoad() {
-        imageBrowserEmptyTextView.visibility = View.VISIBLE
+        if (isAdded && isVisible) {
+            Toast.makeText(context, R.string.image_browser_load_failed, Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onShowImageDetail(itemId: String, itemImageUrl: String, itemTitle: String?) {
-        if (isRunningTwoPaneMode) {
-            val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
-                    ?: ImageBrowserFeatureModuleManager
-            val detailView = module.getImageDetailView(itemId, itemImageUrl, itemTitle)
-            if (detailView is Fragment) {
-                activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.imageDetailContainer, detailView)
-                        ?.commit()
-            }
-        } else {
-            val context = context
-            if (context != null) {
+        if (isAdded && isVisible) {
+            if (isRunningTwoPaneMode) {
                 val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
                         ?: ImageBrowserFeatureModuleManager
-                val intent = module.getImageDetailActivity(context, itemId, itemImageUrl, itemTitle)
-                context.startActivity(intent)
+                val detailView = module.getImageDetailView(itemId, itemImageUrl, itemTitle)
+                if (detailView is Fragment) {
+                    activity?.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.imageDetailContainer, detailView)
+                            ?.commit()
+                }
+            } else {
+                val context = context
+                if (context != null) {
+                    val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+                            ?: ImageBrowserFeatureModuleManager
+                    val intent = module.getImageDetailActivity(context, itemId, itemImageUrl, itemTitle)
+                    context.startActivity(intent)
+                }
             }
         }
     }

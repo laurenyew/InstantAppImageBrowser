@@ -1,6 +1,7 @@
 package laurenyew.imagebrowser.browser.presenters
 
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import android.util.Log
 import laurenyew.imagebrowser.base.commands.AsyncJobCommand
 import laurenyew.imagebrowser.base.commands.GetRecentImagesCommand
@@ -23,14 +24,24 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
     }
 
     private var viewRef: WeakReference<ImageBrowserContract.View>? = null
-    private var apiKey: String? = null
-    //Only one command should be run at once
-    private var command: AsyncJobCommand? = null
     private var data: ArrayList<ImagePreviewDataWrapper> = ArrayList()
 
-    private var currentPageNum: Int = 1
-    private var searchTerm: String? = null
-    private var totalNumPages: Int = 100
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var apiKey: String? = null
+
+    //Only one command should be run at once
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var command: AsyncJobCommand? = null
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var currentPageNum: Int = 1
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var searchTerm: String? = null
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var totalNumPages: Int = 100
+
 
     //region Getters
     val view: ImageBrowserContract.View?
@@ -53,6 +64,7 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
         command = null
         data.clear()
         searchTerm = null
+        apiKey = null
     }
 
     /**
@@ -144,9 +156,8 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
      * Update the view about the load failure
      */
     open fun onLoadImagesFailure(error: String?) {
-        view?.onImagesLoaded(null)
-        view?.onImagesFailedToLoad()
         Log.d("ImageBrowserPresenter", "Load Images Failed. Error: $error")
+        view?.onImagesFailedToLoad()
     }
     //endregion
 }

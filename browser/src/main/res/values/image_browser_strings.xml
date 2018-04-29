@@ -2,4 +2,5 @@
 <resources>
     <string name="image_browser_empty">No Images Available.</string>
     <string name="image_browser_refresh_menu_item">Refresh</string>
+    <string name="image_browser_load_failed">Image Browser Load Images Failed.</string>
 </resources>
