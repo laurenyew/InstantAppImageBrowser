@@ -56,3 +56,6 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+# Keep Gradle Wrapper
+!gradle-wrapper.jar
