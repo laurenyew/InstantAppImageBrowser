@@ -31,6 +31,7 @@ h2. Extra Features:
 * Debug Feature: Recent Item Browser + Default Search Browser [x]
 * Espresso Tests [ ]
 * Build.gradle extensions [x]
+* Updated icons [x]
 
 h2. Third Party Libraries:
 * Retrofit (Networking)
@@ -43,3 +44,6 @@ h2. Future Considerations
 * Smooth Scroll Paging (pre-load)
 * Moving page cache (don't keep all the paged data for space reasons)
 * Offline version + Google Room POC w/ Observables + MVVM
+
+h2. Resources
+* App icons generated with: https://romannurik.github.io/AndroidAssetStudio/icons-generic.html

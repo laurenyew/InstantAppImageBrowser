@@ -4,7 +4,8 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/image_browser_ic_launcher"
+        android:roundIcon="@mipmap/image_browser_ic_launcher_round"
         android:supportsRtl="true">
         <activity android:name="laurenyew.imagebrowser.homepage.HomePageActivity">
             <intent-filter android:order="1">
