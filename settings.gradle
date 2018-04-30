@@ -1,1 +1,1 @@
-include ':browser', ':app', ':base', ':instantapp', ':homepage'
+include ':browser', ':app', ':base', ':instantapp', ':homepage', ':search'

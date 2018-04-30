@@ -16,8 +16,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 /**
+ * @author Lauren Yew on 04/29/2018.
+ *
  * ImageBrowser Preview RecyclerView Adapter
- * Uses DiffUtil.
+ * Uses DiffUtil for better performance on adapter updates
  */
 open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserContract.Presenter?) : RecyclerView.Adapter<ImagePreviewViewHolder>() {
     private var data: MutableList<ImagePreviewDataWrapper> = ArrayList()
@@ -33,6 +35,10 @@ open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserCo
         }
     }
 
+    /**
+     * Handle the diff util update on a background thread
+     * (this can take O(n) time so we don't want it on the main thread)
+     */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     open fun updateDataInternal(newData: List<ImagePreviewDataWrapper>?) {
         val oldData = ArrayList(data)
@@ -48,6 +54,10 @@ open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserCo
         }).start()
     }
 
+    /**
+     * UI thread callback to apply the diff result to the adapter
+     * and take in the latest update
+     */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     open fun applyDataDiffResult(newData: List<ImagePreviewDataWrapper>?, diffResult: DiffUtil.DiffResult) {
         if (pendingDataUpdates.isNotEmpty()) {
@@ -85,8 +95,8 @@ open class ImageBrowserRecyclerViewAdapter(private val presenter: ImageBrowserCo
         if (holder.imageView != null) {
             Picasso.get()
                     .load(itemImageUrl)
-                    .placeholder(R.drawable.image_placeholder)
-                    .error(R.drawable.image_placeholder)
+                    .placeholder(laurenyew.imagebrowser.base.R.drawable.image_placeholder)
+                    .error(laurenyew.imagebrowser.base.R.drawable.image_placeholder)
                     .into(holder.imageView)
         }
         holder.view.setOnClickListener {

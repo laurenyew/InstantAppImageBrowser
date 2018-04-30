@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="min_suggestion_page_height">650dp</dimen>
+    <dimen name="suggestion_item_height">250dp</dimen>
+    <dimen name="all_products_item_height">400dp</dimen>
+</resources>

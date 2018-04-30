@@ -1,5 +1,6 @@
 package laurenyew.imagebrowser.browser.fragments
 
+import android.app.SearchManager
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
@@ -8,22 +9,45 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING
+import android.support.v7.widget.SearchView
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.image_browser_fragment.*
-import laurenyew.imagebrowser.base.SharedPrefConfig
-import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
+import laurenyew.imagebrowser.base.ImageBrowserConfig
+import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerController
 import laurenyew.imagebrowser.browser.ImageBrowserFeatureModuleManager
 import laurenyew.imagebrowser.browser.R
 import laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter
 import laurenyew.imagebrowser.browser.adapters.data.ImagePreviewDataWrapper
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserContract
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContract
+import java.util.*
 
-class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefreshLayout.OnRefreshListener {
+/**
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Two Panel ImageBrowserFragment
+ *
+ * Handles showing the grid recycler view
+ * Handles showing master-detail or starting detail activity
+ * Handles search
+ */
+open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefreshLayout.OnRefreshListener {
     companion object {
         @JvmStatic
-        fun newInstance(): ImageBrowserFragment = ImageBrowserFragment()
+        fun newInstance(searchTerm: String? = null): ImageBrowserFragment =
+                ImageBrowserFragment().apply {
+                    val bundle = Bundle()
+                    if (searchTerm != null) {
+                        bundle.putString(ImageBrowserConfig.ARG_SEARCH_TERM, searchTerm)
+                    }
+                    arguments = bundle
+                }
+
+        //Wait for .5 secs (avg user typing time is .3-1 sec per character)
+        const val DEFAULT_SEARCH_DELAY = 500L
     }
 
     /**
@@ -36,16 +60,26 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
     var shouldShowFirstItem = true
 
     private var searchTerm: String? = null
+    private var isFirstTimeSearch = false
+
+    private var searchMenuItem: MenuItem? = null
+
+    private var searchView: SearchView? = null
+    private var searchQueryKeyEntryTimer: Timer? = null
 
     private var adapter: ImageBrowserRecyclerViewAdapter? = null
-    private var module: ImageBrowserFeatureModuleContract? = null
     private var presenter: ImageBrowserContract.Presenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+        setHasOptionsMenu(true)
+
+        searchTerm = arguments?.getString(ImageBrowserConfig.ARG_SEARCH_TERM)
+        isFirstTimeSearch = searchTerm?.isNotEmpty() == true
+
+        val module: ImageBrowserFeatureModuleContract.Presenters = FeatureModuleManagerController.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Presenters::class.java)
                 ?: ImageBrowserFeatureModuleManager
-        presenter = module?.getImageBrowserPresenter()
+        presenter = module.getImageBrowserPresenter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -61,6 +95,11 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
                     super.onScrollStateChanged(recyclerView, newState)
                     if ((isLandscape && !recyclerView.canScrollHorizontally(1)) || (!isLandscape && !recyclerView.canScrollVertically(1))) {
                         presenter?.loadNextPageOfImages()
+                    }
+                    if (newState == SCROLL_STATE_DRAGGING && searchView?.isIconified == false) {
+                        //Hide Keyboard
+                        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+                        imm?.hideSoftInputFromWindow(view.windowToken, 0)
                     }
                 }
             })
@@ -84,16 +123,47 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
     override fun onDestroyView() {
         super.onDestroyView()
         presenter?.unBind()
+
+        searchQueryKeyEntryTimer?.cancel()
+        searchQueryKeyEntryTimer = null
+
+        searchMenuItem = null
+        searchView = null
     }
 
     override fun onDestroy() {
         super.onDestroy()
         presenter = null
-        module = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.image_browser_menu, menu)
+        searchMenuItem = menu.findItem(R.id.menu_search)
+
+        val menuView = searchMenuItem?.actionView
+        if (menuView is SearchView?) {
+            searchView = menuView
+            searchView?.queryHint = context?.getString(laurenyew.imagebrowser.base.R.string.search_hint)
+            val searchManager = activity?.getSystemService(Context.SEARCH_SERVICE)
+            if (searchManager is SearchManager?) {
+                searchView?.setSearchableInfo(searchManager?.getSearchableInfo(activity?.componentName))
+            }
+            searchView?.setOnQueryTextListener(getQueryTextListener())
+            searchView?.setOnQueryTextFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    searchMenuItem?.collapseActionView()
+                } else {
+                    searchView?.isIconified = true
+                }
+            }
+
+            if (isFirstTimeSearch) {
+                searchView?.isIconified = false
+                searchView?.setQuery(searchTerm ?: "", false)
+            }
+        }
+
+        return super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -110,9 +180,12 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
      * Load the images into the view
      */
     override fun onImagesLoaded(data: List<ImagePreviewDataWrapper>?) {
+        isFirstTimeSearch = false
         if (isAdded && isVisible) {
             if (adapter == null) {
-                adapter = module?.getImageBrowserAdapter(presenter)
+                val module: ImageBrowserFeatureModuleContract.Adapters = FeatureModuleManagerController.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Adapters::class.java)
+                        ?: ImageBrowserFeatureModuleManager
+                adapter = module.getImageBrowserAdapter(presenter)
                 imageBrowserRecyclerView.adapter = adapter
             }
             adapter?.updateData(data)
@@ -131,15 +204,20 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
     }
 
     override fun onImagesFailedToLoad() {
+        isFirstTimeSearch = false
         if (isAdded && isVisible) {
             Toast.makeText(context, R.string.image_browser_load_failed, Toast.LENGTH_LONG).show()
         }
     }
 
+    /**
+     * Depending on if we're running in two pane mode (Tablet in landscape or really large screen),
+     * show the detail in master-detail form on the same page, or start up a new detail activity
+     */
     override fun onShowImageDetail(itemId: String, itemImageUrl: String, itemTitle: String?) {
         if (isAdded && isVisible) {
-            if (isRunningTwoPaneMode) {
-                val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+            if (isRunningTwoPaneMode && imageDetailContainer != null) {
+                val module = FeatureModuleManagerController.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Views::class.java)
                         ?: ImageBrowserFeatureModuleManager
                 val detailView = module.getImageDetailView(itemId, itemImageUrl, itemTitle)
                 if (detailView is Fragment) {
@@ -150,7 +228,7 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
             } else {
                 val context = context
                 if (context != null) {
-                    val module: ImageBrowserFeatureModuleContract = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract::class.java)
+                    val module: ImageBrowserFeatureModuleContract.Activities = FeatureModuleManagerController.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Activities::class.java)
                             ?: ImageBrowserFeatureModuleManager
                     val intent = module.getImageDetailActivity(context, itemId, itemImageUrl, itemTitle)
                     context.startActivity(intent)
@@ -163,22 +241,39 @@ class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefresh
     //region SwipeRefreshLayout
     override fun onRefresh() {
         shouldShowFirstItem = isRunningTwoPaneMode
-        presenter?.refreshImages(searchTerm ?: getDefaultSearchTerm())
+        presenter?.refreshImages(searchTerm)
     }
     //endregion
 
     //region Helper Methods
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun getDefaultSearchTerm(): String {
-        val context = context
-        if (context != null) {
-            val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
-            val shouldShowRecentItems = sharedPrefs.getBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, false)
-            if (!shouldShowRecentItems) {
-                return context.getString(R.string.image_browser_base_search_term) ?: ""
+    /**
+     * Available to override if the don't like the query behavior
+     */
+    open fun getQueryTextListener(): SearchView.OnQueryTextListener {
+        return object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = false
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (!isFirstTimeSearch) {
+                    //Only search after the user has finished/slowed typing to avoid quick typing
+                    //and running multiple searches
+                    searchQueryKeyEntryTimer?.cancel()
+                    searchQueryKeyEntryTimer = Timer()
+                    searchQueryKeyEntryTimer?.schedule(object : TimerTask() {
+                        override fun run() {
+                            activity?.runOnUiThread {
+                                if (isAdded && isVisible) {
+                                    searchTerm = if (newText?.isNotEmpty() == true) newText else null
+                                    onRefresh()
+                                }
+                            }
+                        }
+                    }, DEFAULT_SEARCH_DELAY)
+                }
+                return true
             }
+
         }
-        return ""
     }
     //endregion
 }

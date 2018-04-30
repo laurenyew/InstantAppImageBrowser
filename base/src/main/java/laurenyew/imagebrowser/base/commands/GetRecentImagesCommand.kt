@@ -9,7 +9,9 @@ import laurenyew.imagebrowser.base.model.ImageData
 import laurenyew.imagebrowser.base.networking.FlickrApiBuilder
 
 /**
- * Command used by the browser feature to get images
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Command used by the browser feature to get recent images
  * Execute is provided so we can run this command whenever we'd like
  *
  * This command takes care of executing in the background, and updates the listener
@@ -36,6 +38,9 @@ open class GetRecentImagesCommand(private val apiKey: String,
         val getRecentImagesApi = flickrImageApi
         val extraArgs = HashMap<String, String>()
         extraArgs["privacy_filter"] = "1"
+        extraArgs["safe_search"] = "2" //Moderate Safe search
+        extraArgs["content_type"] = "1" //Photos only
+        extraArgs["sort"] = "relevance"
 
         try {
             val photosCall = getRecentImagesApi?.getRecentPhotos(apiKey, numImagesPerPage, pageNum, extraArgs)

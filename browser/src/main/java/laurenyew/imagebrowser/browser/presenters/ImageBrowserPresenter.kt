@@ -3,6 +3,7 @@ package laurenyew.imagebrowser.browser.presenters
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.util.Log
+import laurenyew.imagebrowser.base.SharedPrefConfig
 import laurenyew.imagebrowser.base.commands.AsyncJobCommand
 import laurenyew.imagebrowser.base.commands.GetRecentImagesCommand
 import laurenyew.imagebrowser.base.commands.SearchImagesCommand
@@ -13,10 +14,13 @@ import laurenyew.imagebrowser.browser.contracts.ImageBrowserContract
 import java.lang.ref.WeakReference
 
 /**
+ * @author Lauren Yew on 04/29/2018.
+ *
  * Image Browser business logic
  *
  * If no search term is available, shows the recent images. Otherwise, does
- * a search for images matching the given search term
+ * a search for images matching the given search term.
+ * Also has logic for defining a default search term.
  */
 open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
     companion object {
@@ -42,6 +46,7 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var totalNumPages: Int = 100
 
+    private var defaultSearchTerm: String = ""
 
     //region Getters
     val view: ImageBrowserContract.View?
@@ -54,7 +59,8 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
 
     override fun onBind(view: ImageBrowserContract.View, context: Context?) {
         viewRef = WeakReference(view)
-        apiKey = context?.getString(R.string.flickr_api_key)
+        apiKey = context?.getString(laurenyew.imagebrowser.base.R.string.flickr_api_key)
+        defaultSearchTerm = getDefaultSearchTerm(context)
     }
 
     override fun unBind() {
@@ -70,19 +76,20 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
     /**
      * Refresh the list of images for the given search term starting at the first page
      */
-    override fun refreshImages(searchTerm: String) {
+    override fun refreshImages(query: String?) {
         //Only let 1 command run at once
         command?.cancel()
 
         //reset the current page
+        val searchQuery = if (query != null && query.isNotEmpty()) query else defaultSearchTerm
+        searchTerm = searchQuery
         currentPageNum = 1
-        this.searchTerm = searchTerm
 
         //load the images async
         val currentApiKey = apiKey
         if (currentApiKey != null) {
-            command = if (searchTerm.isNotEmpty()) {
-                SearchImagesCommand(currentApiKey, searchTerm, numImagesPerPage, currentPageNum,
+            command = if (searchQuery.isNotEmpty()) {
+                SearchImagesCommand(currentApiKey, searchQuery, numImagesPerPage, currentPageNum,
                         { list, pageNum, totalNumPages -> onLoadImagesSuccess(list, pageNum, totalNumPages) },
                         { errorCode -> onLoadImagesFailure(errorCode) })
 
@@ -158,6 +165,22 @@ open class ImageBrowserPresenter : ImageBrowserContract.Presenter {
     open fun onLoadImagesFailure(error: String?) {
         Log.d("ImageBrowserPresenter", "Load Images Failed. Error: $error")
         view?.onImagesFailedToLoad()
+    }
+
+    /**
+     * Helper method for default search term.
+     * Includes logic for debug feature: show recent items
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    open fun getDefaultSearchTerm(context: Context?): String {
+        if (context != null) {
+            val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+            val shouldShowRecentItems = sharedPrefs.getBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, false)
+            if (!shouldShowRecentItems) {
+                return context.getString(R.string.image_browser_base_search_term) ?: ""
+            }
+        }
+        return ""
     }
     //endregion
 }

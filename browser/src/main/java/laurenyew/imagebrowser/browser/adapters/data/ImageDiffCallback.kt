@@ -3,6 +3,8 @@ package laurenyew.imagebrowser.browser.adapters.data
 import android.support.v7.util.DiffUtil
 
 /**
+ * @author Lauren Yew on 04/29/2018.
+ *
  * DiffUtil.Callback that compares image preview data wrappers
  * (Used in [laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter]
  */

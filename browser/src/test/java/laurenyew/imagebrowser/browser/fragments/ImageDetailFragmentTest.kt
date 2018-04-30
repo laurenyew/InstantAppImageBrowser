@@ -3,20 +3,22 @@ package laurenyew.imagebrowser.browser.fragments
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.squareup.picasso.Picasso
 import laurenyew.imagebrowser.base.BuildConfig
 import laurenyew.imagebrowser.browser.R
-import laurenyew.imagebrowser.browser.helpers.ImageBrowserTestBase
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startVisibleFragment
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class)
-class ImageDetailFragmentTest : ImageBrowserTestBase() {
+class ImageDetailFragmentTest {
     private lateinit var fragment: ImageDetailFragment
 
     private lateinit var imageDetailView: ImageView
@@ -24,8 +26,14 @@ class ImageDetailFragmentTest : ImageBrowserTestBase() {
 
     private val expectedTitle = "expectedTitle"
 
-    override fun setup() {
-        super.setup()
+    @Before
+    fun setup() {
+        //Setup up Picasso
+        try {
+            Picasso.get()
+        } catch (e: IllegalStateException) {
+            Picasso.setSingletonInstance(Picasso.Builder(RuntimeEnvironment.application.applicationContext).build())
+        }
         fragment = startTestFragment()
         setupViews(fragment.view!!)
     }

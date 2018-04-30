@@ -17,23 +17,23 @@ import org.robolectric.annotation.Config
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class)
-class FeatureModuleManagerListTest {
+class FeatureModuleManagerControllerTest {
     private val testModule1 = MyFeatureModule1()
     private val testModule2 = MyFeatureModule2()
     private val testModule3 = MyFeatureModule3()
 
     @Before
     fun setup() {
-        FeatureModuleManagerList.clear()
+        FeatureModuleManagerController.clear()
     }
 
     @Test
     fun `given empty feature module manager list, getting any module should return null`() {
         /** Exercise **/
-        val module = FeatureModuleManagerList.getFeatureModuleManager<TestInterface1>(TestInterface1::class.java)
+        val module = FeatureModuleManagerController.getFeatureModuleManager<TestInterface1>(TestInterface1::class.java)
 
         /** Verify **/
-        val managers = FeatureModuleManagerList.managers
+        val managers = FeatureModuleManagerController.getManagersForTesting()
         assertNotNull(managers)
         assertEquals(0, managers.size)
         assertNull("Should not be able to find a module that doesn't exist", module)
@@ -42,14 +42,14 @@ class FeatureModuleManagerListTest {
     @Test
     fun `given search for interface in list, should get the class from list`() {
         /** Arrange **/
-        FeatureModuleManagerList.addFeatureModuleManager(testModule2)
-        FeatureModuleManagerList.addFeatureModuleManager(testModule1)
+        FeatureModuleManagerController.addFeatureModuleManager(testModule2)
+        FeatureModuleManagerController.addFeatureModuleManager(testModule1)
 
         /** Exercise **/
-        val module = FeatureModuleManagerList.getFeatureModuleManager<TestInterface1>(TestInterface1::class.java)
+        val module = FeatureModuleManagerController.getFeatureModuleManager<TestInterface1>(TestInterface1::class.java)
 
         /** Verify **/
-        val managers = FeatureModuleManagerList.managers
+        val managers = FeatureModuleManagerController.getManagersForTesting()
         assertNotNull(managers)
         assertEquals(2, managers.size)
         assertNotNull("Should not be able to find a module that doesn't exist", module)
@@ -59,14 +59,14 @@ class FeatureModuleManagerListTest {
     @Test
     fun `given search for class in list, should get the class from list`() {
         /** Arrange **/
-        FeatureModuleManagerList.addFeatureModuleManager(testModule2)
-        FeatureModuleManagerList.addFeatureModuleManager(testModule1)
+        FeatureModuleManagerController.addFeatureModuleManager(testModule2)
+        FeatureModuleManagerController.addFeatureModuleManager(testModule1)
 
         /** Exercise **/
-        val module = FeatureModuleManagerList.getFeatureModuleManager<MyFeatureModule1>(MyFeatureModule1::class.java)
+        val module = FeatureModuleManagerController.getFeatureModuleManager<MyFeatureModule1>(MyFeatureModule1::class.java)
 
         /** Verify **/
-        val managers = FeatureModuleManagerList.managers
+        val managers = FeatureModuleManagerController.getManagersForTesting()
         assertNotNull(managers)
         assertEquals(2, managers.size)
         assertNotNull("Should not be able to find a module that doesn't exist", module)
@@ -76,13 +76,13 @@ class FeatureModuleManagerListTest {
     @Test
     fun `given search for interface not in list, should get null from list`() {
         /** Arrange **/
-        FeatureModuleManagerList.addFeatureModuleManager(testModule1)
+        FeatureModuleManagerController.addFeatureModuleManager(testModule1)
 
         /** Exercise **/
-        val module = FeatureModuleManagerList.getFeatureModuleManager<TestInterface2>(TestInterface2::class.java)
+        val module = FeatureModuleManagerController.getFeatureModuleManager<TestInterface2>(TestInterface2::class.java)
 
         /** Verify **/
-        val managers = FeatureModuleManagerList.managers
+        val managers = FeatureModuleManagerController.getManagersForTesting()
         assertNotNull(managers)
         assertEquals(1, managers.size)
         assertNull("Should not be able to find a module that doesn't exist", module)
@@ -92,15 +92,15 @@ class FeatureModuleManagerListTest {
     @Test
     fun `given search for interface, priority is FIFO`() {
         /** Arrange **/
-        FeatureModuleManagerList.addFeatureModuleManager(testModule1)
-        FeatureModuleManagerList.addFeatureModuleManager(testModule2)
-        FeatureModuleManagerList.addFeatureModuleManager(testModule3)
+        FeatureModuleManagerController.addFeatureModuleManager(testModule1)
+        FeatureModuleManagerController.addFeatureModuleManager(testModule2)
+        FeatureModuleManagerController.addFeatureModuleManager(testModule3)
 
         /** Exercise **/
-        val module = FeatureModuleManagerList.getFeatureModuleManager<TestInterface1>(TestInterface1::class.java)
+        val module = FeatureModuleManagerController.getFeatureModuleManager<TestInterface1>(TestInterface1::class.java)
 
         /** Verify **/
-        val managers = FeatureModuleManagerList.managers
+        val managers = FeatureModuleManagerController.getManagersForTesting()
         assertNotNull(managers)
         assertEquals(3, managers.size)
         assertNotNull("Should not be able to find a module that doesn't exist", module)

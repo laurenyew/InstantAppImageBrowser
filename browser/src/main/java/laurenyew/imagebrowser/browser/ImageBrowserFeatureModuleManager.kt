@@ -12,14 +12,20 @@ import laurenyew.imagebrowser.browser.fragments.ImageBrowserFragment
 import laurenyew.imagebrowser.browser.fragments.ImageDetailFragment
 import laurenyew.imagebrowser.browser.presenters.ImageBrowserPresenter
 
-object ImageBrowserFeatureModuleManager : FeatureModuleManager(), ImageBrowserFeatureModuleContract {
+/**
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Feature Module Manager for Image Browser.
+ * Makes it easy to provide your own / unit test swap out the parts that make up Image Browser.
+ */
+object ImageBrowserFeatureModuleManager : FeatureModuleManager(), ImageBrowserFeatureModuleContract.Activities, ImageBrowserFeatureModuleContract.Views, ImageBrowserFeatureModuleContract.Presenters, ImageBrowserFeatureModuleContract.Adapters {
     //region activities
     override fun getImageDetailActivity(context: Context, itemId: String, itemImageUrl: String, itemTitle: String?): Intent =
             ImageDetailActivity.newInstance(context, itemId, itemImageUrl, itemTitle)
     //endregion
 
     //region Views
-    override fun getImageBrowserView(): ImageBrowserContract.View = ImageBrowserFragment.newInstance()
+    override fun getImageBrowserView(searchTerm: String?): ImageBrowserContract.View = ImageBrowserFragment.newInstance(searchTerm)
 
     override fun getImageDetailView(itemId: String, itemImageUrl: String, itemTitle: String?): ImageDetailContract.View = ImageDetailFragment.newInstance(itemId, itemImageUrl, itemTitle)
     //endregion

@@ -37,7 +37,7 @@ class ImageBrowserFeatureModuleManagerTest {
     @Test
     fun `getImageBrowserView should return ImageBrowserFragment`() {
         /** Exercise **/
-        val view = ImageBrowserFeatureModuleManager.getImageBrowserView()
+        val view = ImageBrowserFeatureModuleManager.getImageBrowserView(null)
 
         /** Verify **/
         assertNotNull(view)

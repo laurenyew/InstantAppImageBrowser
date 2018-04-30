@@ -3,6 +3,11 @@ package laurenyew.imagebrowser.browser.contracts
 import android.content.Context
 import laurenyew.imagebrowser.browser.adapters.data.ImagePreviewDataWrapper
 
+/**
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * MVP Contract for Image Browser feature
+ */
 interface ImageBrowserContract {
     interface View {
         fun onImagesLoaded(data: List<ImagePreviewDataWrapper>?)
@@ -21,13 +26,16 @@ interface ImageBrowserContract {
         /**
          * Each new search term will refresh the images loaded
          */
-        fun refreshImages(searchTerm: String)
+        fun refreshImages(searchTerm: String?)
 
         /**
          * Will add images for a given pageNum to the current list
          */
         fun loadNextPageOfImages()
 
+        /**
+         * Preview is selected (from the adapter)
+         */
         fun onSelectPreview(itemId: String, itemImageUrl: String, itemTitle: String?)
     }
 }

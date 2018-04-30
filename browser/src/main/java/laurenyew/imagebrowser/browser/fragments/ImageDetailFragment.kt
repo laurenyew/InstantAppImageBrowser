@@ -15,6 +15,8 @@ import laurenyew.imagebrowser.browser.contracts.ImageDetailContract.View.Compani
 import laurenyew.imagebrowser.browser.contracts.ImageDetailContract.View.Companion.ARG_ITEM_IMAGE_URL
 
 /**
+ * @author Lauren Yew on 04/29/2018.
+ *
  * Image Detail Screen
  * Contained in a [ImageBrowserActivity] in two-pane mode (on tablets)
  * or a [ImageDetailActivity] on handsets.
@@ -55,13 +57,15 @@ open class ImageDetailFragment : Fragment(), ImageDetailContract.View {
         if (itemImageUrl != null) {
             Picasso.get()
                     .load(itemImageUrl)
-                    .placeholder(R.drawable.image_placeholder)
-                    .error(R.drawable.image_placeholder)
+                    .placeholder(laurenyew.imagebrowser.base.R.drawable.image_placeholder)
+                    .error(laurenyew.imagebrowser.base.R.drawable.image_placeholder)
                     .into(detailImageView)
         }
 
-        val supportActivityCompat = activity as AppCompatActivity?
-        supportActivityCompat?.supportActionBar?.title = itemTitle
+        val supportActivityCompat = activity
+        if (supportActivityCompat is AppCompatActivity?) {
+            supportActivityCompat?.supportActionBar?.title = itemTitle
+        }
         detailImageTitleTextView.text = itemTitle
     }
 }
