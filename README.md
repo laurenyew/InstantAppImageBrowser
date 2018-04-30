@@ -1,6 +1,12 @@
 # InstantAppImageBrowser
 Instant App Image Browser (Flickr)
 
+### Image Browser
+<img src="https://github.com/laurenyew/InstantAppImageBrowser/blob/develop/screenshots/PhoneImageBrowser.png" alt="ImageBrowser" width="250" height="400"> <img src="https://github.com/laurenyew/InstantAppImageBrowser/blob/develop/screenshots/TabletImageBrowserLandscape.png" alt="TabletImageBrowserLandscape" width="400" height="250"> 
+
+### Search Suggestions Page
+<img src="https://github.com/laurenyew/InstantAppImageBrowser/blob/develop/screenshots/TabletSuggestionsPage.png" alt="TabletSuggestionsPage" width="250" height="400">
+
 ## Requirements:
 - [x] Home Screen
 - [x] Grid Image Viewer / Browser (Flickr)
