@@ -12,8 +12,12 @@ import laurenyew.imagebrowser.search.SearchFeatureModuleManager
 import laurenyew.imagebrowser.search.contracts.SearchFeatureModuleManagerContract
 
 /**
- * Search Suggestions Feature
- * Has Search bar, and suggestions for search types
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Search Suggestions Feature Activity
+ *
+ * Just a container activity.
+ * Sets up its Feature Module Manager.
  */
 open class SearchSuggestionsActivity : AppCompatActivity() {
     companion object {

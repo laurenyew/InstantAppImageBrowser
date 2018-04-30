@@ -1,10 +1,12 @@
 package laurenyew.imagebrowser.browser.presenters
 
+import android.content.Context
 import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import laurenyew.imagebrowser.base.BuildConfig
+import laurenyew.imagebrowser.base.SharedPrefConfig
 import laurenyew.imagebrowser.base.commands.GetRecentImagesCommand
 import laurenyew.imagebrowser.base.commands.SearchImagesCommand
 import laurenyew.imagebrowser.base.model.ImageData
@@ -31,6 +33,8 @@ class ImageBrowserPresenterTest : ImageBrowserTestBase() {
 
     @After
     fun tearDown() {
+        val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        sharedPrefs.edit().clear().commit()
         presenter.unBind()
     }
 
@@ -43,7 +47,7 @@ class ImageBrowserPresenterTest : ImageBrowserTestBase() {
     }
 
     @Test
-    fun `when unbind, presenter should teardonw view reference and api key`() {
+    fun `when unbind, presenter should teardown view reference and api key`() {
         /** Exercise **/
         presenter.unBind()
 
@@ -67,6 +71,9 @@ class ImageBrowserPresenterTest : ImageBrowserTestBase() {
     @Test
     fun `when refreshImages with empty search term, should create get recent images command`() {
         /** Exercise **/
+        val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        sharedPrefs.edit().putBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, true).commit()
+        presenter.onBind(mockView, context)
         presenter.refreshImages("")
 
         /** Verify **/
@@ -94,6 +101,9 @@ class ImageBrowserPresenterTest : ImageBrowserTestBase() {
     @Test
     fun `when loadNextPageOfImages with empty search term, command is get recent photos command`() {
         /** Arrange **/
+        val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        sharedPrefs.edit().putBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, true).commit()
+        presenter.onBind(mockView, context)
         presenter.refreshImages("")
 
         /** Exercise **/
@@ -231,6 +241,9 @@ class ImageBrowserPresenterTest : ImageBrowserTestBase() {
     @Test
     fun `when attempting to load next page and past total num but refresh then page, command will run`() {
         /** Arrange **/
+        val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        sharedPrefs.edit().putBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, true).commit()
+        presenter.onBind(mockView, context)
         presenter.totalNumPages = 2
         presenter.currentPageNum = 2
         presenter.refreshImages("")
@@ -243,5 +256,47 @@ class ImageBrowserPresenterTest : ImageBrowserTestBase() {
         assertTrue(presenter.command is GetRecentImagesCommand)
         assertEquals(1, presenter.currentPageNum) // page num not incremented until page comes back
         assertEquals("", presenter.searchTerm)
+    }
+
+    @Test
+    fun `when sharedPrefs doesn't have SHOULD_SHOW_RECENT_IMAGES, getDefaultSearchTerm should return the default search term`() {
+        /** Arrange **/
+        val expectedSearchTerm = context.getString(R.string.image_browser_base_search_term)
+        val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        sharedPrefs.edit().clear().commit()
+
+        /** Exercise **/
+        val searchTerm = presenter.getDefaultSearchTerm(context)
+
+        /** Verify **/
+        assertEquals(expectedSearchTerm, searchTerm)
+    }
+
+    @Test
+    fun `when sharedPrefs SHOULD_SHOW_RECENT_IMAGES is false, getDefaultSearchTerm should return the default search term`() {
+        /** Arrange **/
+        val expectedSearchTerm = context.getString(R.string.image_browser_base_search_term)
+        val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        sharedPrefs.edit().putBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, false).commit()
+
+        /** Exercise **/
+        val searchTerm = presenter.getDefaultSearchTerm(context)
+
+        /** Verify **/
+        assertEquals(expectedSearchTerm, searchTerm)
+    }
+
+    @Test
+    fun `when sharedPrefs SHOULD_SHOW_RECENT_IMAGES is true, getDefaultSearchTerm should return an empty string`() {
+        /** Arrange **/
+        val expectedSearchTerm = ""
+        val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        sharedPrefs.edit().putBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, true).commit()
+
+        /** Exercise **/
+        val searchTerm = presenter.getDefaultSearchTerm(context)
+
+        /** Verify **/
+        assertEquals(expectedSearchTerm, searchTerm)
     }
 }

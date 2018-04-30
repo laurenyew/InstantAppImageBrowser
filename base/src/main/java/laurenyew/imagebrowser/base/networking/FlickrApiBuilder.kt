@@ -14,6 +14,8 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 /**
+ * @author Lauren Yew on 04/29/2018.
+ *
  * Api Builder to keep the retrofit creation logic separate from the commands
  *
  * Note: Currently trusting all certs b/c was getting "CertificateRevokedException: Certificate has been revoked, reason: UNSPECIFIED"

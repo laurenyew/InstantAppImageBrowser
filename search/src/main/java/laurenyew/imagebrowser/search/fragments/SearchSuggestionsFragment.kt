@@ -12,6 +12,14 @@ import laurenyew.imagebrowser.search.R
 import laurenyew.imagebrowser.search.SearchFeatureModuleManager
 import laurenyew.imagebrowser.search.contracts.SearchFeatureModuleManagerContract
 
+/**
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Search Suggestions Feature
+ * Has Search bar, and suggestions for search types.
+ *
+ * Note: Search view will collapse and clear if you click outside of the search view
+ */
 open class SearchSuggestionsFragment : Fragment() {
     companion object {
         @JvmStatic

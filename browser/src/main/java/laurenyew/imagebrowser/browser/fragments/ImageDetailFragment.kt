@@ -15,6 +15,8 @@ import laurenyew.imagebrowser.browser.contracts.ImageDetailContract.View.Compani
 import laurenyew.imagebrowser.browser.contracts.ImageDetailContract.View.Companion.ARG_ITEM_IMAGE_URL
 
 /**
+ * @author Lauren Yew on 04/29/2018.
+ *
  * Image Detail Screen
  * Contained in a [ImageBrowserActivity] in two-pane mode (on tablets)
  * or a [ImageDetailActivity] on handsets.

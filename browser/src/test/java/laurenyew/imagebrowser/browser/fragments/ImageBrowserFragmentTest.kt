@@ -46,7 +46,7 @@ class ImageBrowserFragmentTest : ImageBrowserTestBase() {
     fun `on view created, presenter should be bound and refreshed`() {
         /** Verify **/
         verify(mockPresenter).onBind(any(), any())
-        verify(mockPresenter).refreshImages(context.getString(R.string.image_browser_base_search_term))
+        verify(mockPresenter).refreshImages(null)
     }
 
     @Test
@@ -64,7 +64,7 @@ class ImageBrowserFragmentTest : ImageBrowserTestBase() {
         fragment.onRefresh()
 
         /** Verify **/
-        verify(mockPresenter, times(2)).refreshImages(context.getString(R.string.image_browser_base_search_term))
+        verify(mockPresenter, times(2)).refreshImages(null)
     }
 
     @Test
@@ -204,48 +204,6 @@ class ImageBrowserFragmentTest : ImageBrowserTestBase() {
         /** Verify **/
         verify(mockFeatureModule).getImageDetailActivity(any(), any(), any(), anyOrNull())
         verify(mockFeatureModule, never()).getImageBrowserView(anyOrNull())
-    }
-
-    @Test
-    fun `when sharedPrefs doesn't have SHOULD_SHOW_RECENT_IMAGES, getDefaultSearchTerm should return the default search term`() {
-        /** Arrange **/
-        val expectedSearchTerm = context.getString(R.string.image_browser_base_search_term)
-        val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
-        sharedPrefs.edit().clear().commit()
-
-        /** Exercise **/
-        val searchTerm = fragment.getDefaultSearchTerm()
-
-        /** Verify **/
-        assertEquals(expectedSearchTerm, searchTerm)
-    }
-
-    @Test
-    fun `when sharedPrefs SHOULD_SHOW_RECENT_IMAGES is false, getDefaultSearchTerm should return the default search term`() {
-        /** Arrange **/
-        val expectedSearchTerm = context.getString(R.string.image_browser_base_search_term)
-        val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
-        sharedPrefs.edit().putBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, false).commit()
-
-        /** Exercise **/
-        val searchTerm = fragment.getDefaultSearchTerm()
-
-        /** Verify **/
-        assertEquals(expectedSearchTerm, searchTerm)
-    }
-
-    @Test
-    fun `when sharedPrefs SHOULD_SHOW_RECENT_IMAGES is true, getDefaultSearchTerm should return an empty string`() {
-        /** Arrange **/
-        val expectedSearchTerm = ""
-        val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
-        sharedPrefs.edit().putBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, true).commit()
-
-        /** Exercise **/
-        val searchTerm = fragment.getDefaultSearchTerm()
-
-        /** Verify **/
-        assertEquals(expectedSearchTerm, searchTerm)
     }
 
     //region Helper Methods

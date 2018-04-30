@@ -3,12 +3,12 @@ package laurenyew.imagebrowser.base.api.response
 import com.squareup.moshi.Json
 
 /**
+ * @author Lauren Yew on 04/29/2018.
  * JSON Responses expected from the flickr api
  * (https://www.flickr.com/services/api/flickr.photos.search.html)
  *
- * Using Moshi to parse them
+ * Using Moshi to parse Json
  */
-
 data class FlickrPhotosResponse(@Json(name = "photos") val pageResponse: FlickrPhotoPageResponse)
 
 data class FlickrPhotoPageResponse(

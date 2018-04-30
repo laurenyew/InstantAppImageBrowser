@@ -13,8 +13,12 @@ import laurenyew.imagebrowser.browser.R
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContract
 
 /**
+ * @author Lauren Yew on 04/29/2018.
+ *
  * ImageBrowserActivity
  * Container for the ImageBrowserFragment
+ *
+ * Also sets up the browser's feature module manager
  */
 open class ImageBrowserActivity : AppCompatActivity() {
     companion object {

@@ -1,5 +1,11 @@
 package laurenyew.imagebrowser.browser.contracts
 
+/**
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Image Detail was pretty simple. No extra data was needed to be loaded,
+ * so just had a View contract for the argument keys being passed in
+ */
 interface ImageDetailContract{
     interface View{
         companion object {

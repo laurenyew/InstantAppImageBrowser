@@ -6,6 +6,10 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
+/**
+ * @author Lauren Yew on 04/29/2018.
+ * Retrofit api for Flickr REST endpoints
+ */
 interface FlickrImageApi {
     @GET("rest/?method=flickr.photos.search&format=json&&nojsoncallback=1")
     fun searchPhotos(@Query("api_key") apiKey: String,

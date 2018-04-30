@@ -4,6 +4,13 @@ import android.content.Context
 import android.content.Intent
 import laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter
 
+/**
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Feature Module Contract for Image Browser feature
+ *
+ * Provided so that it's easy to override / unit test parts of the feature
+ */
 interface ImageBrowserFeatureModuleContract {
 
     interface Activities {

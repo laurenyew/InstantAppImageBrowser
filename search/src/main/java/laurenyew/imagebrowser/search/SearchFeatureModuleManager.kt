@@ -10,6 +10,11 @@ import laurenyew.imagebrowser.search.contracts.SearchFeatureModuleManagerContrac
 import laurenyew.imagebrowser.search.fragments.SearchSuggestionsFragment
 import java.util.*
 
+/**
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Feature Module Manager for Search / Suggestions feature
+ */
 object SearchFeatureModuleManager : FeatureModuleManager(), SearchFeatureModuleManagerContract.Views, SearchFeatureModuleManagerContract.InstantAppLinks {
     //region Views
     override fun getSearchSuggestionsView(): Fragment = SearchSuggestionsFragment.newInstance()

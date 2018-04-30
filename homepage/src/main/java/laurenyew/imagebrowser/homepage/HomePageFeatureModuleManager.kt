@@ -6,6 +6,9 @@ import android.net.Uri
 import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManager
 import laurenyew.imagebrowser.homepage.contracts.HomePageFeatureModuleManagerContract
 
+/**
+ * @author Lauren Yew on 04/29/2018.
+ */
 object HomePageFeatureModuleManager : FeatureModuleManager(), HomePageFeatureModuleManagerContract.InstantAppLinks {
     override fun getImageBrowserInstantAppIntent(context: Context?): Intent =
             Intent(Intent.ACTION_VIEW,

@@ -12,6 +12,12 @@ import laurenyew.imagebrowser.homepage.HomePageFeatureModuleManager
 import laurenyew.imagebrowser.homepage.R
 import laurenyew.imagebrowser.homepage.contracts.HomePageFeatureModuleManagerContract
 
+/**
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Simple activity to show the home page. No MVP required here.
+ * InstantApp link Intents split out into the Feature Module so they can easily be replaced / found
+ */
 open class HomePageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

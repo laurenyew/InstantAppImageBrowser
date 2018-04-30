@@ -3,7 +3,10 @@ package laurenyew.imagebrowser.base.featureManagers
 import android.support.annotation.VisibleForTesting
 
 /**
- * Feature Module Manager List
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Feature Module Manager Controller
+ *
  * Created to allow for easy extension of Views, Presenters, etc. for each feature
  * To switch them out, find the main activity for the feature, and just extend it and add your own
  * feature module manager rather than the default

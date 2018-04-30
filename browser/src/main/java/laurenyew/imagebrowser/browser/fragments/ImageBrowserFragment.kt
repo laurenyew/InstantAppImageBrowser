@@ -16,7 +16,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.image_browser_fragment.*
 import laurenyew.imagebrowser.base.ImageBrowserConfig
-import laurenyew.imagebrowser.base.SharedPrefConfig
 import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerController
 import laurenyew.imagebrowser.browser.ImageBrowserFeatureModuleManager
 import laurenyew.imagebrowser.browser.R
@@ -26,6 +25,15 @@ import laurenyew.imagebrowser.browser.contracts.ImageBrowserContract
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContract
 import java.util.*
 
+/**
+ * @author Lauren Yew on 04/29/2018.
+ *
+ * Two Panel ImageBrowserFragment
+ *
+ * Handles showing the grid recycler view
+ * Handles showing master-detail or starting detail activity
+ * Handles search
+ */
 open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRefreshLayout.OnRefreshListener {
     companion object {
         @JvmStatic
@@ -202,6 +210,10 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
         }
     }
 
+    /**
+     * Depending on if we're running in two pane mode (Tablet in landscape or really large screen),
+     * show the detail in master-detail form on the same page, or start up a new detail activity
+     */
     override fun onShowImageDetail(itemId: String, itemImageUrl: String, itemTitle: String?) {
         if (isAdded && isVisible) {
             if (isRunningTwoPaneMode && imageDetailContainer != null) {
@@ -229,7 +241,7 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
     //region SwipeRefreshLayout
     override fun onRefresh() {
         shouldShowFirstItem = isRunningTwoPaneMode
-        presenter?.refreshImages(searchTerm ?: getDefaultSearchTerm())
+        presenter?.refreshImages(searchTerm)
     }
     //endregion
 
@@ -262,19 +274,6 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
             }
 
         }
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun getDefaultSearchTerm(): String {
-        val context = context
-        if (context != null) {
-            val sharedPrefs = context.getSharedPreferences(SharedPrefConfig.BROWSER_SHARED_PREFERENCES, Context.MODE_PRIVATE)
-            val shouldShowRecentItems = sharedPrefs.getBoolean(SharedPrefConfig.SHOULD_SHOW_RECENT_IMAGES, false)
-            if (!shouldShowRecentItems) {
-                return context.getString(R.string.image_browser_base_search_term) ?: ""
-            }
-        }
-        return ""
     }
     //endregion
 }

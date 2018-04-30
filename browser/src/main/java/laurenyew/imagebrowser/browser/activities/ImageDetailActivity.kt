@@ -14,6 +14,8 @@ import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContrac
 import laurenyew.imagebrowser.browser.contracts.ImageDetailContract
 
 /**
+ * @author Lauren Yew on 04/29/2018.
+ *
  * An activity representing a single imageDetail detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items

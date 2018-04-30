@@ -59,6 +59,7 @@ Instant App Image Browser (Flickr)
 
 ## Resources
 * App icons generated with: https://romannurik.github.io/AndroidAssetStudio/icons-generic.html
+* Suggestions images from: pixabay.com
 
 ## Architecture Notes
 * Base Module:
