@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.search_suggestions_activity.*
-import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
+import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerController
 import laurenyew.imagebrowser.search.R
 import laurenyew.imagebrowser.search.SearchFeatureModuleManager
 import laurenyew.imagebrowser.search.contracts.SearchFeatureModuleManagerContract
@@ -32,7 +32,7 @@ open class SearchSuggestionsActivity : AppCompatActivity() {
         setupFeatureModuleManager()
 
         //Show the view
-        val module: SearchFeatureModuleManagerContract.Views = FeatureModuleManagerList.getFeatureModuleManager(SearchFeatureModuleManagerContract.Views::class.java)
+        val module: SearchFeatureModuleManagerContract.Views = FeatureModuleManagerController.getFeatureModuleManager(SearchFeatureModuleManagerContract.Views::class.java)
                 ?: SearchFeatureModuleManager
         val searchSuggestionsView = module.getSearchSuggestionsView()
         if (searchSuggestionsView is Fragment) {
@@ -43,7 +43,7 @@ open class SearchSuggestionsActivity : AppCompatActivity() {
     }
 
     open fun setupFeatureModuleManager() {
-        FeatureModuleManagerList.addFeatureModuleManager(SearchFeatureModuleManager)
+        FeatureModuleManagerController.addFeatureModuleManager(SearchFeatureModuleManager)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =

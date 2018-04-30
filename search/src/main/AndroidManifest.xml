@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="laurenyew.imagebrowser.search">
 
-    <application>
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/image_browser_ic_launcher"
+        android:roundIcon="@mipmap/image_browser_ic_launcher_round"
+        android:supportsRtl="true">
         <activity
             android:name=".activities.SearchSuggestionsActivity"
             android:label="@string/image_browser_title"

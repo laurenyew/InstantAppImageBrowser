@@ -17,7 +17,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.image_browser_fragment.*
 import laurenyew.imagebrowser.base.ImageBrowserConfig
 import laurenyew.imagebrowser.base.SharedPrefConfig
-import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
+import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerController
 import laurenyew.imagebrowser.browser.ImageBrowserFeatureModuleManager
 import laurenyew.imagebrowser.browser.R
 import laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter
@@ -69,7 +69,7 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
         searchTerm = arguments?.getString(ImageBrowserConfig.ARG_SEARCH_TERM)
         isFirstTimeSearch = searchTerm?.isNotEmpty() == true
 
-        val module: ImageBrowserFeatureModuleContract.Presenters = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Presenters::class.java)
+        val module: ImageBrowserFeatureModuleContract.Presenters = FeatureModuleManagerController.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Presenters::class.java)
                 ?: ImageBrowserFeatureModuleManager
         presenter = module.getImageBrowserPresenter()
     }
@@ -175,7 +175,7 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
         isFirstTimeSearch = false
         if (isAdded && isVisible) {
             if (adapter == null) {
-                val module: ImageBrowserFeatureModuleContract.Adapters = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Adapters::class.java)
+                val module: ImageBrowserFeatureModuleContract.Adapters = FeatureModuleManagerController.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Adapters::class.java)
                         ?: ImageBrowserFeatureModuleManager
                 adapter = module.getImageBrowserAdapter(presenter)
                 imageBrowserRecyclerView.adapter = adapter
@@ -205,7 +205,7 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
     override fun onShowImageDetail(itemId: String, itemImageUrl: String, itemTitle: String?) {
         if (isAdded && isVisible) {
             if (isRunningTwoPaneMode && imageDetailContainer != null) {
-                val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Views::class.java)
+                val module = FeatureModuleManagerController.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Views::class.java)
                         ?: ImageBrowserFeatureModuleManager
                 val detailView = module.getImageDetailView(itemId, itemImageUrl, itemTitle)
                 if (detailView is Fragment) {
@@ -216,7 +216,7 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
             } else {
                 val context = context
                 if (context != null) {
-                    val module: ImageBrowserFeatureModuleContract.Activities = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Activities::class.java)
+                    val module: ImageBrowserFeatureModuleContract.Activities = FeatureModuleManagerController.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Activities::class.java)
                             ?: ImageBrowserFeatureModuleManager
                     val intent = module.getImageDetailActivity(context, itemId, itemImageUrl, itemTitle)
                     context.startActivity(intent)

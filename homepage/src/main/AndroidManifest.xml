@@ -7,7 +7,7 @@
         android:icon="@mipmap/image_browser_ic_launcher"
         android:roundIcon="@mipmap/image_browser_ic_launcher_round"
         android:supportsRtl="true">
-        <activity android:name="laurenyew.imagebrowser.homepage.HomePageActivity">
+        <activity android:name="laurenyew.imagebrowser.homepage.activities.HomePageActivity">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 

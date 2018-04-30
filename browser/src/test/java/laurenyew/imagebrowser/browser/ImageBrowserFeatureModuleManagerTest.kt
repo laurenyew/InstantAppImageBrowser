@@ -1,6 +1,5 @@
 package laurenyew.imagebrowser.browser
 
-import com.nhaarman.mockito_kotlin.anyOrNull
 import laurenyew.imagebrowser.base.BuildConfig
 import laurenyew.imagebrowser.browser.contracts.ImageDetailContract
 import laurenyew.imagebrowser.browser.fragments.ImageBrowserFragment

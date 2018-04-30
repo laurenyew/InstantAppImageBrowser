@@ -48,6 +48,8 @@ Instant App Image Browser (Flickr)
 	* Pre-search, update view
 * Initial Fetch images animated progress screen
 * Espresso tests
+* Lint warnings
+* Replace FeatureModuleManager objects with regular classes?
 
 ## Resources
 * App icons generated with: https://romannurik.github.io/AndroidAssetStudio/icons-generic.html

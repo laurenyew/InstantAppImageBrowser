@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.image_browser_activity.*
 import laurenyew.imagebrowser.base.ImageBrowserConfig
-import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
+import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerController
 import laurenyew.imagebrowser.browser.ImageBrowserFeatureModuleManager
 import laurenyew.imagebrowser.browser.R
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContract
@@ -33,7 +33,7 @@ open class ImageBrowserActivity : AppCompatActivity() {
         setupFeatureModuleManager()
 
         //Show the view
-        val module: ImageBrowserFeatureModuleContract.Views = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Views::class.java)
+        val module: ImageBrowserFeatureModuleContract.Views = FeatureModuleManagerController.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Views::class.java)
                 ?: ImageBrowserFeatureModuleManager
         val searchTerm = intent.getStringExtra(ImageBrowserConfig.ARG_SEARCH_TERM)
         val browserView = module.getImageBrowserView(searchTerm)
@@ -45,7 +45,7 @@ open class ImageBrowserActivity : AppCompatActivity() {
     }
 
     open fun setupFeatureModuleManager() {
-        FeatureModuleManagerList.addFeatureModuleManager(ImageBrowserFeatureModuleManager)
+        FeatureModuleManagerController.addFeatureModuleManager(ImageBrowserFeatureModuleManager)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =

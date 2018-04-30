@@ -8,9 +8,8 @@ import android.support.annotation.VisibleForTesting
  * To switch them out, find the main activity for the feature, and just extend it and add your own
  * feature module manager rather than the default
  */
-object FeatureModuleManagerList {
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val managers: ArrayList<FeatureModuleManager> = ArrayList()
+object FeatureModuleManagerController {
+    private val managers: LinkedHashSet<FeatureModuleManager> = LinkedHashSet()
 
     @Suppress("UNCHECKED_CAST")
     fun <A> getFeatureModuleManager(clazz: Class<*>): A? {
@@ -28,10 +27,13 @@ object FeatureModuleManagerList {
     fun clear() {
         managers.clear()
     }
+
+    @VisibleForTesting
+    fun getManagersForTesting(): List<FeatureModuleManager> = managers.toList()
 }
 
 /**
  * Base FeatureModuleManager class that should be extended by
- * every FeatureModuleManager (used by [FeatureModuleManagerList])
+ * every FeatureModuleManager (used by [FeatureModuleManagerController])
  */
 open class FeatureModuleManager

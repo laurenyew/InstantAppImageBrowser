@@ -1,18 +1,24 @@
-package laurenyew.imagebrowser.homepage
+package laurenyew.imagebrowser.homepage.activities
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.home_page_activity.*
 import laurenyew.imagebrowser.base.SharedPrefConfig
+import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerController
+import laurenyew.imagebrowser.homepage.BuildConfig
+import laurenyew.imagebrowser.homepage.HomePageFeatureModuleManager
+import laurenyew.imagebrowser.homepage.R
+import laurenyew.imagebrowser.homepage.contracts.HomePageFeatureModuleManagerContract
 
 open class HomePageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_page_activity)
+
+        setupFeatureModuleManager()
+
         displayButtons()
     }
 
@@ -32,19 +38,21 @@ open class HomePageActivity : AppCompatActivity() {
         }
 
         openImageBrowserButton.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://laurenyew.imagebrowser.com/imagebrowser")).apply {
-                addCategory(Intent.CATEGORY_BROWSABLE)
-                `package` = packageName
-            })
+            val module: HomePageFeatureModuleManagerContract.InstantAppLinks = FeatureModuleManagerController.getFeatureModuleManager(HomePageFeatureModuleManagerContract.InstantAppLinks::class.java)
+                    ?: HomePageFeatureModuleManager
+            startActivity(module.getImageBrowserInstantAppIntent(applicationContext))
         }
 
         openSearchImageBrowserButton.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://laurenyew.imagebrowser.com/search")).apply {
-                addCategory(Intent.CATEGORY_BROWSABLE)
-                `package` = packageName
-            })
+            val module: HomePageFeatureModuleManagerContract.InstantAppLinks = FeatureModuleManagerController.getFeatureModuleManager(HomePageFeatureModuleManagerContract.InstantAppLinks::class.java)
+                    ?: HomePageFeatureModuleManager
+            startActivity(module.getSearchSuggestionsInstantAppIntent(applicationContext))
         }
     }
+
+    //region Helper Methods
+    open fun setupFeatureModuleManager() {
+        FeatureModuleManagerController.addFeatureModuleManager(HomePageFeatureModuleManager)
+    }
+    //endregion
 }

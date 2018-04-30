@@ -12,7 +12,7 @@
         tools:layout_editor_absoluteY="81dp">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/suggestion4Container"
+            android:id="@+id/suggestion4CardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -25,7 +25,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/suggestion3Container">
+            app:layout_constraintStart_toEndOf="@+id/suggestion3CardView">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,14 +45,14 @@
                 <ImageView
                     android:id="@+id/suggestion4ImageButton"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/suggestion_item_size"
+                    android:layout_height="@dimen/suggestion_item_height"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/img_bread" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/suggestion3Container"
+            android:id="@+id/suggestion3CardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -64,7 +64,7 @@
             android:orientation="vertical"
             app:cardElevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/suggestion4Container"
+            app:layout_constraintEnd_toStartOf="@+id/suggestion4CardView"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -86,14 +86,14 @@
                 <ImageView
                     android:id="@+id/suggestion3ImageButton"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/suggestion_item_size"
+                    android:layout_height="@dimen/suggestion_item_height"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/img_meat" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/suggestion1Container"
+            android:id="@+id/suggestion1CardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -104,8 +104,8 @@
             android:foreground="?android:attr/selectableItemBackground"
             android:orientation="vertical"
             app:cardElevation="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/suggestion3Container"
-            app:layout_constraintEnd_toStartOf="@+id/suggestion2Container"
+            app:layout_constraintBottom_toTopOf="@+id/suggestion3CardView"
+            app:layout_constraintEnd_toStartOf="@+id/suggestion2CardView"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -127,14 +127,14 @@
                 <ImageView
                     android:id="@+id/suggestion1ImageButton"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/suggestion_item_size"
+                    android:layout_height="@dimen/suggestion_item_height"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/img_fruit" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/suggestion2Container"
+            android:id="@+id/suggestion2CardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -145,8 +145,8 @@
             app:cardElevation="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/suggestion1Container"
-            app:layout_constraintTop_toTopOf="@+id/suggestion1Container">
+            app:layout_constraintStart_toEndOf="@+id/suggestion1CardView"
+            app:layout_constraintTop_toTopOf="@+id/suggestion1CardView">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -166,17 +166,17 @@
                 <ImageView
                     android:id="@+id/suggestion2ImageButton"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/suggestion_item_size"
+                    android:layout_height="@dimen/suggestion_item_height"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/img_vegetables" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/allProductsContainer"
+            android:id="@+id/allProductsCardView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -185,7 +185,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             android:orientation="vertical"
             app:cardElevation="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/suggestion1Container"
+            app:layout_constraintBottom_toTopOf="@+id/suggestion1CardView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent"
@@ -210,6 +210,7 @@
                     android:id="@+id/allProductsImageButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:minHeight="@dimen/all_products_item_height"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/img_grocery"
                     tools:layout_editor_absoluteX="8dp" />

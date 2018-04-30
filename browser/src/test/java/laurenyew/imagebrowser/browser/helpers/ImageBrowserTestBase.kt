@@ -7,11 +7,10 @@ import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.whenever
 import com.squareup.picasso.Picasso
 import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManager
-import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
+import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerController
 import laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserContract
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContract
-import laurenyew.imagebrowser.browser.fragments.ImageBrowserFragment
 import org.junit.After
 import org.junit.Before
 import org.robolectric.RuntimeEnvironment
@@ -30,7 +29,7 @@ open class ImageBrowserTestBase {
     open fun setup() {
         whenever(mockFeatureModule.getImageBrowserPresenter()).thenReturn(mockPresenter)
         whenever(mockFeatureModule.getImageBrowserAdapter(any())).thenReturn(mockAdapter)
-        FeatureModuleManagerList.addFeatureModuleManager(mockFeatureModule)
+        FeatureModuleManagerController.addFeatureModuleManager(mockFeatureModule)
         //Setup up Picasso
         try {
             Picasso.get()
@@ -41,7 +40,7 @@ open class ImageBrowserTestBase {
 
     @After
     fun teardown() {
-        FeatureModuleManagerList.clear()
+        FeatureModuleManagerController.clear()
     }
 
     abstract class MockImageBrowserFeatureModuleManager : FeatureModuleManager(), ImageBrowserFeatureModuleContract.Views, ImageBrowserFeatureModuleContract.Activities, ImageBrowserFeatureModuleContract.Adapters, ImageBrowserFeatureModuleContract.Presenters

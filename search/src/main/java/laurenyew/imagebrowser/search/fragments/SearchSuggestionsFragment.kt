@@ -2,18 +2,17 @@ package laurenyew.imagebrowser.search.fragments
 
 import android.app.SearchManager
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.SearchView
 import android.view.*
 import kotlinx.android.synthetic.main.search_suggestions_fragment.*
-import laurenyew.imagebrowser.base.ImageBrowserConfig
+import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerController
 import laurenyew.imagebrowser.search.R
-import java.util.*
+import laurenyew.imagebrowser.search.SearchFeatureModuleManager
+import laurenyew.imagebrowser.search.contracts.SearchFeatureModuleManagerContract
 
-class SearchSuggestionsFragment : Fragment() {
+open class SearchSuggestionsFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(): SearchSuggestionsFragment = SearchSuggestionsFragment()
@@ -32,23 +31,23 @@ class SearchSuggestionsFragment : Fragment() {
             inflater.inflate(R.layout.search_suggestions_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        allProductsContainer?.setOnClickListener {
+        allProductsCardView?.setOnClickListener {
             searchView?.clearFocus()
             performSearch(null)
         }
-        suggestion1Container?.setOnClickListener {
+        suggestion1CardView?.setOnClickListener {
             searchView?.clearFocus()
             performSearch(getString(R.string.suggestion_button_title_1))
         }
-        suggestion2Container?.setOnClickListener {
+        suggestion2CardView?.setOnClickListener {
             searchView?.clearFocus()
             performSearch(getString(R.string.suggestion_button_title_2))
         }
-        suggestion3Container?.setOnClickListener {
+        suggestion3CardView?.setOnClickListener {
             searchView?.clearFocus()
             performSearch(getString(R.string.suggestion_button_title_3))
         }
-        suggestion4Container?.setOnClickListener {
+        suggestion4CardView?.setOnClickListener {
             searchView?.clearFocus()
             performSearch(getString(R.string.suggestion_button_title_4))
         }
@@ -91,14 +90,9 @@ class SearchSuggestionsFragment : Fragment() {
 
     //region Helper Methods
     open fun performSearch(searchTerm: String?) {
-        startActivity(Intent(Intent.ACTION_VIEW,
-                Uri.parse("https://laurenyew.imagebrowser.com/imagebrowser")).apply {
-            addCategory(Intent.CATEGORY_BROWSABLE)
-            `package` = activity?.packageName
-            if (searchTerm != null) {
-                putExtra(ImageBrowserConfig.ARG_SEARCH_TERM, searchTerm.toLowerCase(Locale.US))
-            }
-        })
+        val module: SearchFeatureModuleManagerContract.InstantAppLinks = FeatureModuleManagerController.getFeatureModuleManager(SearchFeatureModuleManagerContract.InstantAppLinks::class.java)
+                ?: SearchFeatureModuleManager
+        startActivity(module.getImageBrowserInstantAppIntent(context, searchTerm))
     }
 
     /**
