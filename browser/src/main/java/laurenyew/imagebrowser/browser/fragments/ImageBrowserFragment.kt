@@ -69,7 +69,7 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
         searchTerm = arguments?.getString(ImageBrowserConfig.ARG_SEARCH_TERM)
         isFirstTimeSearch = searchTerm?.isNotEmpty() == true
 
-        val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Presenters::class.java)
+        val module: ImageBrowserFeatureModuleContract.Presenters = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Presenters::class.java)
                 ?: ImageBrowserFeatureModuleManager
         presenter = module.getImageBrowserPresenter()
     }
@@ -175,7 +175,7 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
         isFirstTimeSearch = false
         if (isAdded && isVisible) {
             if (adapter == null) {
-                val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Adapters::class.java)
+                val module: ImageBrowserFeatureModuleContract.Adapters = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Adapters::class.java)
                         ?: ImageBrowserFeatureModuleManager
                 adapter = module.getImageBrowserAdapter(presenter)
                 imageBrowserRecyclerView.adapter = adapter
@@ -204,7 +204,7 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
 
     override fun onShowImageDetail(itemId: String, itemImageUrl: String, itemTitle: String?) {
         if (isAdded && isVisible) {
-            if (isRunningTwoPaneMode) {
+            if (isRunningTwoPaneMode && imageDetailContainer != null) {
                 val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Views::class.java)
                         ?: ImageBrowserFeatureModuleManager
                 val detailView = module.getImageDetailView(itemId, itemImageUrl, itemTitle)
@@ -216,7 +216,7 @@ open class ImageBrowserFragment : Fragment(), ImageBrowserContract.View, SwipeRe
             } else {
                 val context = context
                 if (context != null) {
-                    val module = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Activities::class.java)
+                    val module: ImageBrowserFeatureModuleContract.Activities = FeatureModuleManagerList.getFeatureModuleManager(ImageBrowserFeatureModuleContract.Activities::class.java)
                             ?: ImageBrowserFeatureModuleManager
                     val intent = module.getImageDetailActivity(context, itemId, itemImageUrl, itemTitle)
                     context.startActivity(intent)

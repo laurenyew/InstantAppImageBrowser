@@ -30,7 +30,6 @@ Instant App Image Browser (Flickr)
 - [x] Navigation to and from home page 
 - [x] Reusable / Extensible 
 - [x] Debug Feature: Recent Item or Default Search  on empty search 
-- [ ] Espresso Tests 
 - [x] Build.gradle extensions
 - [x] Updated icons 
 
@@ -48,6 +47,7 @@ Instant App Image Browser (Flickr)
 * Google Room POC w/ Observables + MVVM
 	* Pre-search, update view
 * Initial Fetch images animated progress screen
+* Espresso tests
 
 ## Resources
 * App icons generated with: https://romannurik.github.io/AndroidAssetStudio/icons-generic.html

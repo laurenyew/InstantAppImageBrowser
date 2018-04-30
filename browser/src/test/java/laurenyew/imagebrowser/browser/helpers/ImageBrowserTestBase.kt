@@ -11,6 +11,7 @@ import laurenyew.imagebrowser.base.featureManagers.FeatureModuleManagerList
 import laurenyew.imagebrowser.browser.adapters.ImageBrowserRecyclerViewAdapter
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserContract
 import laurenyew.imagebrowser.browser.contracts.ImageBrowserFeatureModuleContract
+import laurenyew.imagebrowser.browser.fragments.ImageBrowserFragment
 import org.junit.After
 import org.junit.Before
 import org.robolectric.RuntimeEnvironment
@@ -43,5 +44,5 @@ open class ImageBrowserTestBase {
         FeatureModuleManagerList.clear()
     }
 
-    abstract class MockImageBrowserFeatureModuleManager : FeatureModuleManager(), ImageBrowserFeatureModuleContract
+    abstract class MockImageBrowserFeatureModuleManager : FeatureModuleManager(), ImageBrowserFeatureModuleContract.Views, ImageBrowserFeatureModuleContract.Activities, ImageBrowserFeatureModuleContract.Adapters, ImageBrowserFeatureModuleContract.Presenters
 }

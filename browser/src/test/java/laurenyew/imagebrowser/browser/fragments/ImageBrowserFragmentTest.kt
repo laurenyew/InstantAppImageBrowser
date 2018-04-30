@@ -187,8 +187,9 @@ class ImageBrowserFragmentTest : ImageBrowserTestBase() {
         fragment.onShowImageDetail("id", "itemUrl", "itemTitle")
 
         /** Verify **/
-        verify(mockFeatureModule).getImageDetailView(any(), any(), any())
-        verify(mockFeatureModule, never()).getImageDetailActivity(any(), any(), any(), anyOrNull())
+        //Unfortunately, shouldn't get the detail view b/c the layout isn't available
+        verify(mockFeatureModule, never()).getImageDetailView(any(), any(), any())
+        verify(mockFeatureModule).getImageDetailActivity(any(), any(), any(), anyOrNull())
     }
 
     @Test
@@ -202,7 +203,7 @@ class ImageBrowserFragmentTest : ImageBrowserTestBase() {
 
         /** Verify **/
         verify(mockFeatureModule).getImageDetailActivity(any(), any(), any(), anyOrNull())
-        verify(mockFeatureModule, never()).getImageBrowserView()
+        verify(mockFeatureModule, never()).getImageBrowserView(anyOrNull())
     }
 
     @Test

@@ -1,5 +1,6 @@
 package laurenyew.imagebrowser.browser
 
+import com.nhaarman.mockito_kotlin.anyOrNull
 import laurenyew.imagebrowser.base.BuildConfig
 import laurenyew.imagebrowser.browser.contracts.ImageDetailContract
 import laurenyew.imagebrowser.browser.fragments.ImageBrowserFragment
@@ -37,7 +38,7 @@ class ImageBrowserFeatureModuleManagerTest {
     @Test
     fun `getImageBrowserView should return ImageBrowserFragment`() {
         /** Exercise **/
-        val view = ImageBrowserFeatureModuleManager.getImageBrowserView()
+        val view = ImageBrowserFeatureModuleManager.getImageBrowserView(null)
 
         /** Verify **/
         assertNotNull(view)

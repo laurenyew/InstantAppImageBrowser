@@ -60,8 +60,10 @@ open class ImageDetailFragment : Fragment(), ImageDetailContract.View {
                     .into(detailImageView)
         }
 
-        val supportActivityCompat = activity as AppCompatActivity?
-        supportActivityCompat?.supportActionBar?.title = itemTitle
+        val supportActivityCompat = activity
+        if (supportActivityCompat is AppCompatActivity?) {
+            supportActivityCompat?.supportActionBar?.title = itemTitle
+        }
         detailImageTitleTextView.text = itemTitle
     }
 }
